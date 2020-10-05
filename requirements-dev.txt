@@ -1,2 +1,4 @@
 wheel
 twine
+pytest
+pytest-cov
