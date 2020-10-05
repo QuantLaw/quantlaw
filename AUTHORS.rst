@@ -2,4 +2,4 @@
 Contributors
 ============
 
-* Janis Beckedorf <janis@beckfish.de>
+* Janis Beckedorf <janis.beckedorf@law-school.de    >
