@@ -41,7 +41,7 @@ if [[ "$DISTRIB" == "conda" ]]; then
 fi
 
 # for all
-pip install -U pip setuptools
+pip install -U pip setuptools virtualenv
 pip install tox
 
 if [[ "$COVERAGE" == "true" ]]; then
