@@ -1,8 +1,6 @@
 from regex import regex
 
 # fmt: off
-
-
 reference_range_pattern_str = (
     r'(?(DEFINE)'
         r'(?<numb>'
@@ -88,8 +86,6 @@ reference_range_pattern_str = (
         r')*'
     r')?'
 )
-
-
 # fmt: on
 
 
@@ -99,8 +95,6 @@ reference_range_pattern = regex.compile(
 
 
 # fmt: off
-
-
 suffix_ignore_pattern_str = (
     r'^('
         r'(Gesetzes|Anordnung) vom \d+. \w+ \d+ \(BGBl\. I S\. \d+\)|'
@@ -154,8 +148,6 @@ suffix_ignore_pattern_str = (
             # but stops before next reference trigger (Art...|§)
     r')'
 )
-
-
 # fmt: on
 
 
