@@ -27,14 +27,13 @@ script:
   - |
     if [[ "$COVERAGE" == "true" ]]; then
       pre-commit install
-      pre-commit run --all-files
+      pre-commit run --all-files || true
     fi
+  - cat /home/travis/.cache/pre-commit/pre-commit.log
 after_success:
   - if [[ "$COVERAGE" == "true" ]]; then coveralls || echo "failed"; fi
 after_script:
   - travis-cleanup
-after_failure:
-  - cat /home/travis/.cache/pre-commit/pre-commit.log
 cache:
   pip: true
   directories:
