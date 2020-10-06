@@ -10,19 +10,36 @@ from quantlaw.de_extract.stemming import stem_law_name
 class StatutesMatch:
     def __init__(
         self,
+        text: str,
         start: int,
         end: int,
         suffix_len: int,
         law_len: int,
         law_match_type: str,
-        first_unit: str,
     ):
+        self.text = text
         self.start = start
         self.end = end
         self.suffix_len = suffix_len
         self.law_len = law_len
         self.law_match_type = law_match_type
-        self.first_unit = first_unit
+
+    def main_text(self):
+        return self.text[self.start : self.end]
+
+    def suffix_text(self):
+        return self.text[self.end : self.end + self.suffix_len]
+
+    def law_text(self):
+        law_start_pos = self.end + self.suffix_len
+        return self.text[law_start_pos : law_start_pos + self.law_len]
+
+    def __str__(self):
+        return (
+            f"Main: {self.main_text()};"
+            f"Suffix: {self.suffix_text()};"
+            f"Law: {self.law_text()}"
+        )
 
 
 class StatutesExtractor:
@@ -33,7 +50,7 @@ class StatutesExtractor:
     def __init__(self, laws_lookup):
         self._laws_lookup = None
         self.laws_lookup_keys = None
-        self.law_lookup = laws_lookup
+        self.laws_lookup = laws_lookup
 
     @property
     def laws_lookup(self) -> dict:
@@ -51,7 +68,16 @@ class StatutesExtractor:
             text[match.end() :]
         )
 
-        return match
+        statutes_match = StatutesMatch(
+            text=text,
+            start=match.start(),
+            end=match.end(),
+            suffix_len=suffix_len,
+            law_len=law_len,
+            law_match_type=law_match_type,
+        )
+
+        return statutes_match
 
     def get_suffix_and_law_name(self, string):
         """
