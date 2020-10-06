@@ -8,6 +8,10 @@ from quantlaw.de_extract.stemming import stem_law_name
 
 
 class StatutesMatch:
+    """
+    Class to report the areas of citations to German statutes and regulations
+    """
+
     def __init__(
         self,
         text: str,
