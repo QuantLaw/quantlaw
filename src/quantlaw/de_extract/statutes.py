@@ -42,7 +42,8 @@ class StatutesMatch:
         return (
             f"Main:{self.main_text()};"
             f"Suffix:{self.suffix_text()};"
-            f"Law:{self.law_text()}"
+            f"Law:{self.law_text()};"
+            f"Type:{self.law_match_type}"
         )
 
 

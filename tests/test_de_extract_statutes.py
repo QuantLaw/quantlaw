@@ -6,12 +6,92 @@ sample_laws_lookup = {"buergerlich gesetzbuch": "BGB", "grundgesetz": "GG"}
 
 
 class DeExtractTestCase(unittest.TestCase):
-    def test_something(self):
+    def test_basic_extracting(self):
         extractor = StatutesExtractor(sample_laws_lookup)
         match = extractor.search(
             "Lorem ipsum § 123 Abs. 3 des Bürgerliches Gesetzbuches"
         )
         self.assertEqual(
-            "Main:§ 123 Abs. 3;Suffix: des ;Law:Bürgerliches Gesetzbuches",
+            "Main:§ 123 Abs. 3;Suffix: des ;Law:Bürgerliches Gesetzbuches;Type:dict",
+            str(match),
+        )
+
+    def test_laws_lookup_property(self):
+        extractor = StatutesExtractor(sample_laws_lookup)
+        self.assertEqual(
+            sample_laws_lookup,
+            extractor.laws_lookup,
+        )
+        self.assertEqual(
+            ["grundgesetz", "buergerlich gesetzbuch"], extractor.laws_lookup_keys
+        )
+        another_dict = {"abc": "efg"}
+        extractor.laws_lookup = another_dict
+        self.assertEqual(another_dict, extractor.laws_lookup)
+        self.assertEqual(["abc"], extractor.laws_lookup_keys)
+
+
+class DeExtractVariationsTestCase(unittest.TestCase):
+    def setUp(self) -> None:
+        self.extractor = StatutesExtractor(sample_laws_lookup)
+
+    def test_dict(self):
+        match = self.extractor.search("Art. 20a Abs. 1 Grundgesetz")
+        self.assertEqual(
+            "Main:Art. 20a Abs. 1;Suffix: ;Law:Grundgesetz;Type:dict",
+            str(match),
+        )
+
+    def test_sgb(self):
+        match = self.extractor.search("§ 123 Drittes Buch Sozialgesetzbuch")
+        self.assertEqual(
+            "Main:§ 123;Suffix: ;Law:Drittes Buch Sozialgesetzbuch;Type:sgb",
+            str(match),
+        )
+
+    def test_sgb_suffix(self):
+        match = self.extractor.search("§ 123 des Drittes Buch Sozialgesetzbuch")
+        self.assertEqual(
+            "Main:§ 123;Suffix: des ;Law:Drittes Buch Sozialgesetzbuch;Type:sgb",
+            str(match),
+        )
+
+    def test_eu(self):
+        match = self.extractor.search("Art. 123 der Richtlinie 12/34/EU")
+        self.assertEqual(
+            "Main:Art. 123;Suffix: der ;Law:Richtlinie 12/34/EU;Type:eu",
+            str(match),
+        )
+
+    def test_ignore(self):
+        match = self.extractor.search(
+            "Art. 123 des Gesetzes vom 3. April 2020 (BGBl. I S. 999)"
+        )
+        self.assertEqual(
+            "Main:Art. 123;"
+            "Suffix: des ;"
+            "Law:Gesetzes vom 3. April 2020 (BGBl. I S. 999);"
+            "Type:ignore",
+            str(match),
+        )
+
+    def test_ignore_suffix(self):
+        match = self.extractor.search("§ 123a dieser Verordnung")
+        self.assertEqual(
+            "Main:§ 123a;Suffix: ;Law:dieser Verordnung;Type:ignore",
+            str(match),
+        )
+
+    def test_internal(self):
+        match = self.extractor.search("zxczc § 123a ihfkjsdfhkjshf jhkjh kdsjfhksdjf ")
+        self.assertEqual(
+            "Main:§ 123a;Suffix:;Law:;Type:internal",
+            str(match),
+        )
+
+    def test_last_word_not_matching(self):
+        match = self.extractor.search("Art. 123a Grundgesetzkommentar")
+        self.assertEqual(
+            "Main:Art. 123a;Suffix:;Law:;Type:internal",
             str(match),
         )
