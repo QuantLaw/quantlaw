@@ -31,7 +31,11 @@ script:
       pre-commit run --all-files || cat /home/travis/.cache/pre-commit/pre-commit.log
     fi
 after_success:
-  - if [[ "$COVERAGE" == "true" ]]; then coveralls || echo "failed"; fi
+  - |
+    if [[ "$COVERAGE" == "true" ]]; then
+      coveralls || echo "failed"
+      bash <(curl -s https://codecov.io/bash)
+    fi
 after_script:
   - travis-cleanup
 cache:
