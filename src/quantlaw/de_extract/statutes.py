@@ -36,9 +36,9 @@ class StatutesMatch:
 
     def __str__(self):
         return (
-            f"Main: {self.main_text()};"
-            f"Suffix: {self.suffix_text()};"
-            f"Law: {self.law_text()}"
+            f"Main:{self.main_text()};"
+            f"Suffix:{self.suffix_text()};"
+            f"Law:{self.law_text()}"
         )
 
 
