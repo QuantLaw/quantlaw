@@ -33,6 +33,8 @@ after_success:
   - if [[ "$COVERAGE" == "true" ]]; then coveralls || echo "failed"; fi
 after_script:
   - travis-cleanup
+after_failure:
+  - cat /home/travis/.cache/pre-commit/pre-commit.log
 cache:
   pip: true
   directories:
