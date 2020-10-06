@@ -26,6 +26,7 @@ script:
   - tox
   - |
     if [[ "$COVERAGE" == "true" ]]; then
+      pip check
       pre-commit install
       pre-commit run --all-files || cat /home/travis/.cache/pre-commit/pre-commit.log
     fi
