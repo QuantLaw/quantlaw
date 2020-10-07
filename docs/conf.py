@@ -284,3 +284,5 @@ intersphinx_mapping = {
     'pandas': ('http://pandas.pydata.org/pandas-docs/stable', None),
     'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
 }
+
+autodoc_mock_imports = ['bs4', 'regex', 'networkx']
