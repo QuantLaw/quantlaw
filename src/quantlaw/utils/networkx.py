@@ -5,10 +5,11 @@ def induced_subgraph(G, filter_type, filter_attribute, filter_values):
     """
     Create custom induced subgraph.
 
-    args:
-        filter_type: node|edge
+    Args:
+        filter_type: 'node' or 'edge'
         filter_attribute: attribute to filter on
-        filter_values: attribute values to evaluate to True
+        filter_values: attribute values to evaluate to `True`
+
     """
     G = nx.MultiDiGraph(G)
     if filter_type == "node":
@@ -76,10 +77,13 @@ def sequence_graph(G, seq_decay_func=decay_function(1), seq_ref_ratio=1):
     Creates sequence graph for G, consisting of seqitems and their cross-references
     only,
     where neighboring seqitems are connected via edges in both directions.
-    :param seq_decay_func: function to calculate sequence edge weight based on distance
-        between neighboring nodes
-    :param seq_ref_ratio: ratio between a sequence edge weight when nodes in the
-        sequence are at minimum distance from each other and a reference edge weight
+
+    Args:
+        seq_decay_func: function to calculate sequence edge weight based on distance
+            between neighboring nodes
+        seq_ref_ratio: ratio between a sequence edge weight when nodes in the
+            sequence are at minimum distance from each other and a reference edge weight
+
     """
 
     hG = hierarchy_graph(G)
@@ -210,11 +214,13 @@ def aggregate_attr_in_quotient_graph(nG, G, new_nodes, aggregation_attrs):
     """
     Sums attributes of nodes in an original graph per community and adds the sum to the
     nodes in a quotient graph.
-    :param nG: Quotient graph
-    :param G: Original graph
-    :param new_nodes: Mapping of nodes in the quotient graph to an iterable of nodes in
-        the original graph that are represented by the node in the quotient graph.
-    :param aggregation_attrs: attributes to aggregate
+
+    Args:
+        nG: Quotient graph
+        G: Original graph
+            new_nodes: Mapping of nodes in the quotient graph to an iterable of nodes in
+            the original graph that are represented by the node in the quotient graph.
+        aggregation_attrs: attributes to aggregate
     """
     for attr in aggregation_attrs:
         attr_data = nx.get_node_attributes(G, attr)
