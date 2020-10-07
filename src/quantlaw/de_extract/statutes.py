@@ -163,9 +163,11 @@ class StatutesExtractor:
     def get_suffix_and_law_name(self, string: str):
         """
         Returns: A tuple containing length of
+
             1. the article between numbers and law name (eg. " der ")
             2. length of name of law as in the given string
             3. The type of the reference.
+
             If not found lengths are 0.
         """
         suffix_match = regex.match(r"^,?\s+?de[sr]\s+", string)

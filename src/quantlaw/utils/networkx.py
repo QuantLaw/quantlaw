@@ -4,9 +4,11 @@ import networkx as nx
 def induced_subgraph(G, filter_type, filter_attribute, filter_values):
     """
     Create custom induced subgraph.
-    :param filter_type: node|edge
-    :param filter_attribute: attribute to filter on
-    :param filter_values: attribute values to evaluate to True
+
+    args:
+        filter_type: node|edge
+        filter_attribute: attribute to filter on
+        filter_values: attribute values to evaluate to True
     """
     G = nx.MultiDiGraph(G)
     if filter_type == "node":
