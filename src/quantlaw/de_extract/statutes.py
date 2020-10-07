@@ -1,5 +1,13 @@
 from regex import regex
 
+from quantlaw.de_extract.statutes_parse_patterns import (
+    fix_errors_in_citation,
+    infer_units,
+    sgb_dict,
+    split_citation_into_enum_parts,
+    split_citation_part,
+    split_parts_accidently_joined,
+)
 from quantlaw.de_extract.statutes_patterns import (
     eu_law_name_pattern,
     ignore_law_name_pattern,
@@ -84,11 +92,7 @@ class StatutesMatchWithMainArea(StatusMatch):
         )
 
 
-class StatutesExtractor:
-    """
-    Class to find areas of citations to German statutes and regulations
-    """
-
+class StatutesProcessor:
     def __init__(self, laws_lookup: dict):
         self._laws_lookup = None
         self.laws_lookup_keys = None
@@ -116,6 +120,24 @@ class StatutesExtractor:
 
         # Sort be decreasing string length to favor matches of long law names.
         self.laws_lookup_keys = sorted(val.keys(), reverse=True)
+
+    def match_law_name(self, text: str):
+        """
+        Checks if the text begins with a law name provided in self.laws_lookup_keys.
+
+        Returns: The matched substring.
+
+        """
+        for law in self.laws_lookup_keys:
+            if text[: len(law)] == law:
+                return law
+        return None
+
+
+class StatutesExtractor(StatutesProcessor):
+    """
+    Class to find areas of citations to German statutes and regulations
+    """
 
     def search(self, text: str, pos: int = 0) -> StatusMatch:
         """
@@ -277,14 +299,74 @@ class StatutesExtractor:
         match = suffix_ignore_pattern.match(test_str)
         return len(match[0]) if match else 0
 
-    def match_law_name(self, text: str):
-        """
-        Checks if the text begins with a law name provided in self.laws_lookup_keys.
 
-        Returns: The matched substring.
+class ParsedResult:
+    def __init__(self):
+        pass
+
+
+class StringCaseException(Exception):
+    pass
+
+
+class StatutesParser(StatutesProcessor):
+    def parse_main(self, main_text: str):
+        citation = fix_errors_in_citation(main_text.strip())
+
+        enum_parts = split_citation_into_enum_parts(citation)
+
+        reference_paths = []
+        for enum_part in enum_parts:
+            for string in enum_part:
+                splitted_citation_part_list = list(split_citation_part(string))
+                if len(splitted_citation_part_list):
+                    reference_paths.append(splitted_citation_part_list)
+                else:
+                    print(f"Empty citation part in {citation} in part {string}")
+
+        reference_paths = split_parts_accidently_joined(reference_paths)
+
+        for reference_path in reference_paths[1:]:
+            prev_reference_path = reference_paths[
+                reference_paths.index(reference_path) - 1
+            ]
+            infer_units(reference_path, prev_reference_path)
+
+        return reference_paths
+
+    def parse_law(self, law_text: str, match_type: str, current_lawid: str = None):
+        """
+        Parses the law information from a references found by StatutesMatchWithMainArea
+
+        Args:
+            main_text: E.g. "§ 123 Abs. 4 und 5 Nr. 6"
+            law_text: E.g. "BGB"
+            match_type: E.g. "dict"
+
+        Returns:
 
         """
-        for law in self.laws_lookup_keys:
-            if text[: len(law)] == law:
-                return law
-        return None
+
+        if match_type == "dict":
+            lawname_stem = stem_law_name(law_text)
+            match = self.match_law_name(lawname_stem)
+            return self.laws_lookup[match]
+
+        elif match_type == "sgb":
+            lawid = sgb_dict[stem_law_name(law_text)]
+            if type(lawid) is tuple:
+                assert len(lawid) == 2
+                if lawid[0] in self.laws_lookup_keys:
+                    return lawid[0]
+                elif lawid[1] in self.laws_lookup_keys:
+                    return lawid[1]
+                else:
+                    return lawid[1]
+
+        elif match_type == "internal":
+            if current_lawid is None:
+                raise Exception("Current law id must be set for internal reference")
+            return current_lawid
+
+        else:
+            return None  # match_type: ignore or unknown
