@@ -102,3 +102,7 @@ class DeExtractVariationsTestCase(unittest.TestCase):
             "Main:Art. 123a;Suffix: der ;Law:;Type:unknown",
             str(match),
         )
+
+    def test_no_match(self):
+        match = self.extractor.search("Lorem ipsum")
+        self.assertIsNone(match)
