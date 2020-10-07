@@ -1,7 +1,10 @@
 from regex import regex
 
 from quantlaw.de_extract.statutes_patterns import (
+    eu_law_name_pattern,
+    ignore_law_name_pattern,
     reference_range_pattern,
+    sgb_law_name_pattern,
     suffix_ignore_pattern,
 )
 from quantlaw.de_extract.stemming import stem_law_name
@@ -159,61 +162,24 @@ class StatutesExtractor:
 
     def get_no_suffix_ignore_law_name_len(self, test_str):
 
-        # fmt: off
-        match = regex.match(
-            r"^("
-            r"dieser Verordnung|"
-            r"(G|AnO)\s?[i\d-\/]* v(om)?\.? \d+\.\s?\d+\.\s?\d+( I+)? [\d-]+"
-            r")",
+        match = ignore_law_name_pattern.match(
             test_str,
-            flags=regex.IGNORECASE,
         )
-        # fmt: on
 
         return len(match[0]) if match else 0
 
     def get_sgb_law_name_len(self, test_str):
 
-        # fmt: off
-        match = regex.match(
-            r"^("
-            r"("
-                r"erst|zweit|dritt|viert|fünft|sechst|siebt|acht|neunt|zehnt|elft|"
-                r"zwölft|\d{1,2}\."
-            r")"
-            r"en?s? buche?s?(( des)? sozialgesetzbuche?s?)?"
-            r"|"
-            r"SGB"
-            r"(\s|\-)"
-            r"("
-            r"(I|II|III|IV|V|VI|VII|VIII|IX|X|XI|XII)\b"
-            r"|"
-            r"\d{1,2}"
-            r")"
-            r")",
+        match = sgb_law_name_pattern.match(
             test_str,
-            flags=regex.IGNORECASE,
         )
-        # fmt: on
 
         return len(match[0]) if match else 0
 
     def get_eu_law_name_len(self, test_str):
-        # fmt: off
-        match = regex.match(
-            r"^("
-                r"(Delegierten )?"
-                r"(Durchführungs)?"
-                r"(Verordnung|Richtlinie)\s?"
-                r"\((EU|EW?G|Euratom)\)\s+(Nr\.\s+)?\d+/\d+"
-            r"|"
-            r"(Durchführungs)?(Richtlinie|Entscheidung)\s+\d+/\d+/(EW?G|EU)\b|"
-            r"(Rahmen)?beschlusses\s\d+/\d+/\w\w\b"
-            r")",
+        match = eu_law_name_pattern.match(
             test_str,
-            flags=regex.IGNORECASE,
         )
-        # fmt: on
         return len(match[0]) if match else 0
 
     def get_ignore_law_name_len(self, test_str):

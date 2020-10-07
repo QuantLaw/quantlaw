@@ -87,8 +87,6 @@ reference_range_pattern_str = (
     r')?'
 )
 # fmt: on
-
-
 reference_range_pattern = regex.compile(
     reference_range_pattern_str, flags=regex.IGNORECASE
 )
@@ -149,6 +147,54 @@ suffix_ignore_pattern_str = (
     r')'
 )
 # fmt: on
-
-
 suffix_ignore_pattern = regex.compile(suffix_ignore_pattern_str, flags=regex.IGNORECASE)
+
+
+# fmt: off
+sgb_law_name_pattern_str = (
+    r"^("
+    r"("
+        r"erst|zweit|dritt|viert|fünft|sechst|siebt|acht|neunt|zehnt|elft|"
+        r"zwölft|\d{1,2}\."
+    r")"
+    r"en?s? buche?s?(( des)? sozialgesetzbuche?s?)?"
+    r"|"
+    r"SGB"
+    r"(\s|\-)"
+    r"("
+    r"(I|II|III|IV|V|VI|VII|VIII|IX|X|XI|XII)\b"
+    r"|"
+    r"\d{1,2}"
+    r")"
+    r")"
+)
+# fmt: on
+sgb_law_name_pattern = regex.compile(sgb_law_name_pattern_str, flags=regex.IGNORECASE)
+
+
+# fmt: off
+eu_law_name_pattern_str = (
+    r"^("
+        r"(Delegierten )?"
+        r"(Durchführungs)?"
+        r"(Verordnung|Richtlinie)\s?"
+        r"\((EU|EW?G|Euratom)\)\s+(Nr\.\s+)?\d+/\d+"
+    r"|"
+    r"(Durchführungs)?(Richtlinie|Entscheidung)\s+\d+/\d+/(EW?G|EU)\b|"
+    r"(Rahmen)?beschlusses\s\d+/\d+/\w\w\b"
+    r")"
+)
+# fmt: on
+eu_law_name_pattern = regex.compile(eu_law_name_pattern_str, flags=regex.IGNORECASE)
+
+# fmt: off
+ignore_law_name_pattern_str = (
+    r"^("
+        r"dieser Verordnung|"
+        r"(G|AnO)\s?[i\d-\/]* v(om)?\.? \d+\.\s?\d+\.\s?\d+( I+)? [\d-]+"
+    r")"
+)
+# fmt: on
+ignore_law_name_pattern = regex.compile(
+    ignore_law_name_pattern_str, flags=regex.IGNORECASE
+)

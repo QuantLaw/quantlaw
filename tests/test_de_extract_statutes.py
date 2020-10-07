@@ -95,3 +95,10 @@ class DeExtractVariationsTestCase(unittest.TestCase):
             "Main:Art. 123a;Suffix:;Law:;Type:internal",
             str(match),
         )
+
+    def test_false_suffix(self):
+        match = self.extractor.search("Art. 123a der asdasdasd")
+        self.assertEqual(
+            "Main:Art. 123a;Suffix: der ;Law:;Type:unknown",
+            str(match),
+        )
