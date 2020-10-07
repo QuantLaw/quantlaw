@@ -82,3 +82,167 @@ class NetworkxTextCase(unittest.TestCase):
         G.add_edges_from([[4, 5]], edge_type="reference")
         leaves = quantlaw.utils.networkx.get_leaves(G)
         self.assertEqual({3, 4, 5}, leaves)
+
+    def test_sequence_graph(self):
+        G = nx.DiGraph(name="x")
+        G.add_node("1_01", chars_n=30, chars_nowhites=24, tokens_n=8, tokens_unique=3)
+        G.add_node("1_02", chars_n=30, chars_nowhites=24, tokens_n=6, tokens_unique=3)
+        G.add_node("1_03", chars_n=20, chars_nowhites=16, tokens_n=4, tokens_unique=2)
+        G.add_node("1_04", chars_n=10, chars_nowhites=8, tokens_n=2, tokens_unique=1)
+        G.add_node("1_05", chars_n=10, chars_nowhites=8, tokens_n=2, tokens_unique=1)
+        G.add_node("1_06", chars_n=10, chars_nowhites=8, tokens_n=2, tokens_unique=1)
+        G.add_node("2_01", chars_n=10, chars_nowhites=8, tokens_n=2, tokens_unique=1)
+        G.add_node("2_02", chars_n=10, chars_nowhites=8, tokens_n=2, tokens_unique=1)
+        G.add_edges_from(
+            [
+                ["1_01", "1_02"],
+                ["1_02", "1_03"],
+                ["1_03", "1_04"],
+                ["1_03", "1_05"],
+                ["1_02", "1_06"],
+                ["2_01", "2_02"],
+            ],
+            edge_type="containment",
+        )
+        G.add_edge("1_04", "2_02", edge_type="reference")
+
+        H = quantlaw.utils.networkx.sequence_graph(G, seq_ref_ratio=23)
+        self.assertEqual(["1_04", "1_05", "1_06", "2_02"], list(H.nodes))
+        self.assertEqual(
+            [
+                ("1_04", "2_02", {"edge_type": "reference", "weight": 1 / 23}),
+                (
+                    "1_04",
+                    "1_05",
+                    {"backwards": False, "edge_type": "sequence", "weight": 1.0},
+                ),
+                (
+                    "1_05",
+                    "1_06",
+                    {"backwards": False, "edge_type": "sequence", "weight": 0.5},
+                ),
+                (
+                    "1_05",
+                    "1_04",
+                    {"backwards": True, "edge_type": "sequence", "weight": 1.0},
+                ),
+                (
+                    "1_06",
+                    "1_05",
+                    {"backwards": True, "edge_type": "sequence", "weight": 0.5},
+                ),
+            ],
+            list(H.edges(data=True)),
+        )
+
+        H = quantlaw.utils.networkx.sequence_graph(G, seq_ref_ratio=0)
+        self.assertEqual(["1_04", "1_05", "1_06", "2_02"], list(H.nodes))
+        self.assertEqual(
+            [("1_04", "2_02", {"edge_type": "reference", "weight": 1})],
+            list(H.edges(data=True)),
+        )
+
+    def test_quotient_graph(self):
+        G = nx.DiGraph(name="x")
+        G.add_nodes_from(
+            [
+                (
+                    "1_04",
+                    {
+                        "chars_n": 10,
+                        "chars_nowhites": 8,
+                        "tokens_n": 2,
+                        "tokens_unique": 1,
+                        "cluster": 1,
+                        "level": 3,
+                    },
+                ),
+                (
+                    "1_05",
+                    {
+                        "chars_n": 10,
+                        "chars_nowhites": 8,
+                        "tokens_n": 2,
+                        "tokens_unique": 1,
+                        "cluster": 2,
+                        "level": 3,
+                    },
+                ),
+                (
+                    "1_06",
+                    {
+                        "chars_n": 10,
+                        "chars_nowhites": 8,
+                        "tokens_n": 2,
+                        "tokens_unique": 1,
+                        "cluster": 2,
+                        "level": 2,
+                    },
+                ),
+                (
+                    "2_02",
+                    {
+                        "chars_n": 10,
+                        "chars_nowhites": 8,
+                        "tokens_n": 2,
+                        "tokens_unique": 1,
+                        "cluster": 1,
+                        "level": 1,
+                    },
+                ),
+            ]
+        )
+        G.add_edges_from(
+            [
+                ("1_05", "2_02", {"edge_type": "reference", "weight": 1 / 23}),
+                (
+                    "1_04",
+                    "1_05",
+                    {"backwards": False, "edge_type": "sequence", "weight": 1.0},
+                ),
+                (
+                    "1_05",
+                    "1_06",
+                    {"backwards": False, "edge_type": "sequence", "weight": 0.5},
+                ),
+                (
+                    "1_05",
+                    "1_04",
+                    {"backwards": True, "edge_type": "sequence", "weight": 1.0},
+                ),
+                (
+                    "1_06",
+                    "1_05",
+                    {"backwards": True, "edge_type": "sequence", "weight": 0.5},
+                ),
+            ]
+        )
+
+        H = quantlaw.utils.networkx.quotient_graph(G, "cluster")
+        self.assertEqual(
+            [
+                (
+                    1,
+                    {
+                        "chars_n": 20,
+                        "chars_nowhites": 16,
+                        "tokens_n": 4,
+                        "tokens_unique": 2,
+                    },
+                ),
+                (
+                    2,
+                    {
+                        "chars_n": 20,
+                        "chars_nowhites": 16,
+                        "tokens_n": 4,
+                        "tokens_unique": 2,
+                    },
+                ),
+            ],
+            list(H.nodes(data=True)),
+        )
+        self.assertEqual(
+            [(2, 1, {"edge_type": "reference"})],
+            list(H.edges(data=True)),
+        )
