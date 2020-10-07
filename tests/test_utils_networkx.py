@@ -1,4 +1,5 @@
 import unittest
+
 import networkx as nx
 
 from quantlaw.utils.networkx import aggregate_attr_in_quotient_graph
