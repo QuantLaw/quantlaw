@@ -16,6 +16,6 @@
 # scipy==1.0
 #
 
-eautifulsoup4
+beautifulsoup4
 networkx
 regex
