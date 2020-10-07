@@ -10,7 +10,20 @@ from quantlaw.de_extract.statutes_patterns import (
 from quantlaw.de_extract.stemming import stem_law_name
 
 
-class StatutesMatch:
+class StatusMatch:
+    """
+    Class to report the areas of citations to German statutes and regulations
+    if a trigger e.g. '§' is found but it is not followed by a citation.
+    """
+
+    def __init__(self, trigger: str):
+        self.trigger = trigger
+
+    def has_main_area(self):
+        return False
+
+
+class StatutesMatchWithMainArea(StatusMatch):
     """
     Class to report the areas of citations to German statutes and regulations
     """
@@ -23,6 +36,8 @@ class StatutesMatch:
         suffix_len: int,
         law_len: int,
         law_match_type: str,
+        *args,
+        **kwargs,
     ):
         self.text = text
         self.start = start
@@ -30,6 +45,10 @@ class StatutesMatch:
         self.suffix_len = suffix_len
         self.law_len = law_len
         self.law_match_type = law_match_type
+        super().__init__(*args, **kwargs)
+
+    def has_main_area(self):
+        return True
 
     def main_text(self):
         """
@@ -62,13 +81,6 @@ class StatutesMatch:
             f"Law:{self.law_text()};"
             f"Type:{self.law_match_type}"
         )
-
-
-class CitationTriggerFoundWithoutMainContent(Exception):
-    def __init__(self, trigger, message="Trigger found without main content"):
-        self.trigger = trigger
-        self.message = message
-        super().__init__(self.message)
 
 
 class StatutesExtractor:
@@ -104,7 +116,7 @@ class StatutesExtractor:
         # Sort be decreasing string length to favor matches of long law names.
         self.laws_lookup_keys = sorted(val.keys(), reverse=True)
 
-    def search(self, text: str, pos: int = 0) -> StatutesMatch:
+    def search(self, text: str, pos: int = 0) -> StatusMatch:
         """
         Finds the next occurence of a statute reference in a given text
 
@@ -123,7 +135,7 @@ class StatutesExtractor:
 
         # Found a trigger e.g "§" not no citation follows
         if not match.groupdict()["main"]:
-            raise CitationTriggerFoundWithoutMainContent(match.groupdict()["trigger"])
+            return StatusMatch(trigger=match.groupdict()["trigger"])
 
         # Get length of optional suffix and law name that may follow the main area.
         # and categorize the reference type.
@@ -132,13 +144,14 @@ class StatutesExtractor:
         )
 
         # Create a return object
-        statutes_match = StatutesMatch(
+        statutes_match = StatutesMatchWithMainArea(
             text=text,
             start=match.start(),
             end=match.end(),
             suffix_len=suffix_len,
             law_len=law_len,
             law_match_type=law_match_type,
+            trigger=match.groupdict()["trigger"],
         )
 
         return statutes_match
