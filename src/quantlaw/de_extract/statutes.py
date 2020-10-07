@@ -64,6 +64,13 @@ class StatutesMatch:
         )
 
 
+class CitationTriggerFoundWithoutMainContent(Exception):
+    def __init__(self, trigger, message="Trigger found without main content"):
+        self.trigger = trigger
+        self.message = message
+        super().__init__(self.message)
+
+
 class StatutesExtractor:
     """
     Class to find areas of citations to German statutes and regulations
@@ -113,6 +120,10 @@ class StatutesExtractor:
 
         if not match:
             return None
+
+        # Found a trigger e.g "§" not no citation follows
+        if not match.groupdict()["main"]:
+            raise CitationTriggerFoundWithoutMainContent(match.groupdict()["trigger"])
 
         # Get length of optional suffix and law name that may follow the main area.
         # and categorize the reference type.

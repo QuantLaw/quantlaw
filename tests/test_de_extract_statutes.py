@@ -1,6 +1,9 @@
 import unittest
 
-from quantlaw.de_extract.statutes import StatutesExtractor
+from quantlaw.de_extract.statutes import (
+    CitationTriggerFoundWithoutMainContent,
+    StatutesExtractor,
+)
 
 sample_laws_lookup = {"buergerlich gesetzbuch": "BGB", "grundgesetz": "GG"}
 
@@ -106,3 +109,10 @@ class DeExtractVariationsTestCase(unittest.TestCase):
     def test_no_match(self):
         match = self.extractor.search("Lorem ipsum")
         self.assertIsNone(match)
+
+    def test_trigger_without_main(self):
+        try:
+            self.extractor.search("Lorem § ipsum")
+            self.fail("Exception should be raised")
+        except CitationTriggerFoundWithoutMainContent as err:
+            self.assertEqual("§ ", err.trigger)
