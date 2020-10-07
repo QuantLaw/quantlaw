@@ -16,8 +16,15 @@ class StatusMatch:
     if a trigger e.g. '§' is found but it is not followed by a citation.
     """
 
-    def __init__(self, trigger: str):
-        self.trigger = trigger
+    def __init__(
+        self,
+        text: str,
+        start: int,
+        end: int,
+    ):
+        self.text = text
+        self.start = start
+        self.end = end
 
     def has_main_area(self):
         return False
@@ -30,18 +37,12 @@ class StatutesMatchWithMainArea(StatusMatch):
 
     def __init__(
         self,
-        text: str,
-        start: int,
-        end: int,
         suffix_len: int,
         law_len: int,
         law_match_type: str,
         *args,
         **kwargs,
     ):
-        self.text = text
-        self.start = start
-        self.end = end
         self.suffix_len = suffix_len
         self.law_len = law_len
         self.law_match_type = law_match_type
@@ -135,7 +136,11 @@ class StatutesExtractor:
 
         # Found a trigger e.g "§" not no citation follows
         if not match.groupdict()["main"]:
-            return StatusMatch(trigger=match.groupdict()["trigger"])
+            return StatusMatch(
+                text=text,
+                start=match.start(),
+                end=match.end(),
+            )
 
         # Get length of optional suffix and law name that may follow the main area.
         # and categorize the reference type.
@@ -151,7 +156,6 @@ class StatutesExtractor:
             suffix_len=suffix_len,
             law_len=law_len,
             law_match_type=law_match_type,
-            trigger=match.groupdict()["trigger"],
         )
 
         return statutes_match
