@@ -187,6 +187,7 @@ eu_law_name_pattern_str = (
 # fmt: on
 eu_law_name_pattern = regex.compile(eu_law_name_pattern_str, flags=regex.IGNORECASE)
 
+
 # fmt: off
 ignore_law_name_pattern_str = (
     r"^("
