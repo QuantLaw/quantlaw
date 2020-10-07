@@ -20,6 +20,7 @@ __location__ = os.path.join(os.getcwd(), os.path.dirname(
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.join(__location__, '../src'))
+sys.path.append(os.path.abspath('..'))
 
 # -- Run sphinx-apidoc ------------------------------------------------------
 # This hack is necessary since RTD does not issue `sphinx-apidoc` before running
