@@ -26,6 +26,7 @@ def induced_subgraph(G, filter_type, filter_attribute, filter_values):
         )
     else:
         raise
+
     sG.graph["name"] = "_".join(
         [G.graph["name"], filter_type, filter_attribute, str(*filter_values)]
     )
@@ -70,15 +71,18 @@ def decay_function(key):
 
 def sequence_graph(G, seq_decay_func=decay_function(1), seq_ref_ratio=1):
     """
-    Creates sequence graph for G, consisting of seqitems and their cross-references only,
+    Creates sequence graph for G, consisting of seqitems and their cross-references
+    only,
     where neighboring seqitems are connected via edges in both directions.
-    :param seq_decay_func: function to calculate sequence edge weight based on distance between neighboring nodes
-    :param seq_ref_ratio: ratio between a sequence edge weight when nodes in the sequence are at minimum distance
-           from each other and a reference edge weight
+    :param seq_decay_func: function to calculate sequence edge weight based on distance
+        between neighboring nodes
+    :param seq_ref_ratio: ratio between a sequence edge weight when nodes in the
+        sequence are at minimum distance from each other and a reference edge weight
     """
 
     hG = hierarchy_graph(G)
-    # make sure we get _all_ seqitems as leaves, not only the ones without outgoing references
+    # make sure we get _all_ seqitems as leaves, not only the ones without outgoing
+    # references
     leaves = [n for n in hG.nodes() if hG.out_degree(n) == 0]
 
     sG = nx.MultiDiGraph(nx.induced_subgraph(G, leaves))
@@ -139,13 +143,14 @@ def quotient_graph(
     aggregation_attrs=("chars_n", "chars_nowhites", "tokens_n", "tokens_unique"),
 ):
     """
-    Generate the quotient graph with all nodes sharing the same node_attribute condensed into a single node.
-    Simplest use case is aggregation by law_name.
+    Generate the quotient graph with all nodes sharing the same node_attribute condensed
+    into a single node. Simplest use case is aggregation by law_name.
     """
 
     # node_key:attribute_value map
     attribute_data = dict(G.nodes(data=node_attribute))
-    # set cluster -1 if they were not part of the clustering (guess: those are empty laws)
+    # set cluster -1 if they were not part of the clustering
+    # (guess: those are empty laws)
     attribute_data = {
         k: (v if v is not None else -1) for k, v in attribute_data.items()
     }
@@ -201,11 +206,12 @@ def quotient_graph(
 
 def aggregate_attr_in_quotient_graph(nG, G, new_nodes, aggregation_attrs):
     """
-    Sums attributes of nodes in an original graph per community and adds the sum to the nodes in a quotient graph.
+    Sums attributes of nodes in an original graph per community and adds the sum to the
+    nodes in a quotient graph.
     :param nG: Quotient graph
     :param G: Original graph
-    :param new_nodes: Mapping of nodes in the quotient graph to an iterable of nodes in the original graph
-        that are represented by the node in the quotient graph.
+    :param new_nodes: Mapping of nodes in the quotient graph to an iterable of nodes in
+        the original graph that are represented by the node in the quotient graph.
     :param aggregation_attrs: attributes to aggregate
     """
     for attr in aggregation_attrs:
