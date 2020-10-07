@@ -128,3 +128,88 @@ def get_new_edges(G, ordered_seqitems, seq_decay_func):
                 )
             )
     return there + back
+
+
+def quotient_graph(
+    G,
+    node_attribute,
+    edge_types=["reference", "cooccurrence"],
+    self_loops=False,
+    root_level=-1,
+    aggregation_attrs=("chars_n", "chars_nowhites", "tokens_n", "tokens_unique"),
+):
+    """
+    Generate the quotient graph with all nodes sharing the same node_attribute condensed into a single node.
+    Simplest use case is aggregation by law_name.
+    """
+
+    # node_key:attribute_value map
+    attribute_data = dict(G.nodes(data=node_attribute))
+    # set cluster -1 if they were not part of the clustering (guess: those are empty laws)
+    attribute_data = {
+        k: (v if v is not None else -1) for k, v in attribute_data.items()
+    }
+    # unique values in that map
+    unique_values = sorted(list(set(attribute_data.values())))
+
+    # remove the root if root_level is given
+    root = None
+    if root_level is not None:
+        roots = [x for x in G.nodes() if G.nodes[x]["level"] == root_level]
+        if roots:
+            root = roots[0]
+            unique_values.remove(root)
+
+    # build a new MultiDiGraph
+    nG = nx.MultiDiGraph()
+
+    # add nodes
+    new_nodes = {x: [] for x in unique_values}
+    nG.add_nodes_from(unique_values)
+
+    # sort nodes into buckets
+    for n in attribute_data.keys():
+        if n != root:
+            mapped_to = attribute_data[n]
+            new_nodes[mapped_to].append(n)
+            if G.nodes[n].get("heading") == mapped_to:
+                for x in G.nodes[n].keys():
+                    nG.nodes[mapped_to][x] = G.nodes[n][x]
+
+    # add edges
+    for e in G.edges(data=True):
+        if e[-1]["edge_type"] not in edge_types:
+            continue
+        if (True if self_loops else attribute_data[e[0]] != attribute_data[e[1]]) and (
+            True if root_level is None else G.nodes[e[0]]["level"] != root_level
+        ):  # special treatment for root
+            k = nG.add_edge(
+                attribute_data[e[0]], attribute_data[e[1]], edge_type=e[-1]["edge_type"]
+            )
+            if e[-1]["edge_type"] == "sequence":
+                nG.edges[attribute_data[e[0]], attribute_data[e[1]], k]["weight"] = e[
+                    -1
+                ]["weight"]
+
+    nG.graph["name"] = f'{G.graph["name"]}_quotient_graph_{node_attribute}'
+
+    if aggregation_attrs:
+        aggregate_attr_in_quotient_graph(nG, G, new_nodes, aggregation_attrs)
+
+    return nG
+
+
+def aggregate_attr_in_quotient_graph(nG, G, new_nodes, aggregation_attrs):
+    """
+    Sums attributes of nodes in an original graph per community and adds the sum to the nodes in a quotient graph.
+    :param nG: Quotient graph
+    :param G: Original graph
+    :param new_nodes: Mapping of nodes in the quotient graph to an iterable of nodes in the original graph
+        that are represented by the node in the quotient graph.
+    :param aggregation_attrs: attributes to aggregate
+    """
+    for attr in aggregation_attrs:
+        attr_data = nx.get_node_attributes(G, attr)
+        for community_id, nodes in new_nodes.items():
+            aggregated_value = sum(attr_data.get(n) for n in nodes)
+            nG.nodes[community_id][attr] = aggregated_value
