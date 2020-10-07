@@ -111,7 +111,7 @@ class StatutesExtractor:
         # Find the main area of the reference
         match = reference_range_pattern.search(text, pos)
 
-        if match:
+        if not match:
             return None
 
         # Get length of optional suffix and law name that may follow the main area.
