@@ -1,0 +1,52 @@
+import os
+from unittest import TestCase
+
+from quantlaw.utils.beautiful_soup import create_soup, save_soup, find_parent_with_name
+
+
+class UtilsBeautifulSoupTestCase(TestCase):
+    def setUp(self):
+        self.text = """
+        <law heading="ALPHA">
+        <book heading="X">
+        <section heading="A">
+        </section>
+        <section heading="B">
+        </section>
+        </book>
+        <book heading="Y">
+        <section heading="A">
+        </section>
+        <section heading="B">
+        </section>
+        </book>
+        </law>
+        """
+        self.source_filename = "temp.txt"
+        self.xml_filename = "temp.xml"
+        with open(self.source_filename, "w") as f:
+            f.write(self.text)
+
+    def test_create_soup(self):
+        soup = create_soup(self.source_filename)
+        self.assertEqual(soup.book.attrs["heading"], "X")
+
+    def test_save_soup(self):
+        soup = create_soup(self.source_filename)
+        save_soup(soup, self.xml_filename)
+        soup = create_soup(self.xml_filename)
+        self.assertEqual(soup.book.attrs["heading"], "X")
+
+    def test_find_parent_with_name(self):
+        soup = create_soup(self.source_filename)
+        base_tag = soup.find("section")
+        parent_with_name = find_parent_with_name(base_tag, "law")
+        self.assertEqual(parent_with_name.attrs["heading"], "ALPHA")
+        parent_with_name = find_parent_with_name(soup.find("law"), "law")
+        self.assertEqual(parent_with_name.attrs["heading"], "ALPHA")
+
+    def tearDown(self):
+        if os.path.exists(self.source_filename):
+            os.remove(self.source_filename)
+        if os.path.exists(self.xml_filename):
+            os.remove(self.xml_filename)

@@ -6,7 +6,7 @@ import quantlaw
 from quantlaw.utils.networkx import aggregate_attr_in_quotient_graph
 
 
-class NetworkxTextCase(unittest.TestCase):
+class NetworkxTestCase(unittest.TestCase):
     def test_aggregate_attr_in_quotient_graph(self):
         G = nx.Graph()
         G.add_node("a", attr1=30, attr2=2.0)
