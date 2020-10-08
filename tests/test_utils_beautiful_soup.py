@@ -1,7 +1,7 @@
 import os
 from unittest import TestCase
 
-from quantlaw.utils.beautiful_soup import create_soup, save_soup, find_parent_with_name
+from quantlaw.utils.beautiful_soup import create_soup, find_parent_with_name, save_soup
 
 
 class UtilsBeautifulSoupTestCase(TestCase):

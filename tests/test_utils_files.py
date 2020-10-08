@@ -3,6 +3,7 @@ from unittest import TestCase
 
 from quantlaw.utils.files import ensure_exists, list_dir
 
+
 class UtilsFilesTestCase(TestCase):
     def setUp(self):
         self.directory = "./temp/test"
