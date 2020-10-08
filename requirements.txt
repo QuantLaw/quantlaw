@@ -17,5 +17,6 @@
 #
 
 beautifulsoup4
+lxml
 networkx
 regex

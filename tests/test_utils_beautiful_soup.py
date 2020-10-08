@@ -1,8 +1,6 @@
 import os
 from unittest import TestCase
 
-import pytest
-
 from quantlaw.utils.beautiful_soup import create_soup, find_parent_with_name, save_soup
 
 
@@ -38,7 +36,7 @@ class UtilsBeautifulSoupTestCase(TestCase):
         save_soup(soup, self.xml_filename)
         soup = create_soup(self.xml_filename)
         self.assertEqual(soup.book.attrs["heading"], "X")
-        with pytest.raises(OSError):
+        with self.assertRaises(OSError):
             save_soup(soup, 100)
 
     def test_find_parent_with_name(self):
