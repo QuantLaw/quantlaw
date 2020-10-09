@@ -2,7 +2,7 @@
 Changelog
 =========
 
-Version 0.1
+Version 0.0.1
 ===========
 
 - Initial version. Code used in Daniel Martin Katz, Corinna Coupette, Janis Beckedorf, and Dirk Hartung,
