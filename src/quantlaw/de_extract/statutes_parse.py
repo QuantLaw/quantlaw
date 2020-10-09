@@ -17,15 +17,46 @@ from quantlaw.de_extract.stemming import stem_law_name
 
 
 class StringCaseException(Exception):
+    """
+    Exception is raised if a unit in a reference cannot be parsed. In this case it is
+    often an issue of upper oder lower case formatting.
+    """
+
     pass
 
 
 class NoUnitMatched(Exception):
+    """
+    Exception is raised if a unit in a refren cannot be parsed.
+    """
+
     pass
 
 
 class StatutesParser(StatutesProcessor):
-    def parse_main(self, main_text: str):
+    """
+    Class to parse the content of a reference area identified by StatutesExtractor
+    """
+
+    def parse_main(self, main_text: str) -> list:
+        """
+        Parses a string containing a reference to a specific section within a given law.
+        E.g. "§ 123 Abs. 4 Satz 5 und 6".
+        The parsed informtaion is formatted into lists nested in lists nested in lists.
+        - The outer list is a list of references.
+        - References are lists of path components. A path component is e.g. "Abs. 4".
+        - A path component is represented by a list with two elements: The first
+            contains the unit the second the value.
+
+        The example above would be represented as
+        `[[['§', '123'], ['Abs', '4'], ['Satz', '5']],
+        [['§', '123'], ['Abs', '4'], ['Satz', '6']]]`.
+
+        Args:
+            main_text: string to parse
+
+        Returns: The parsed reference.
+        """
         citation = self.fix_errors_in_citation(main_text.strip())
 
         enum_parts = self.split_citation_into_enum_parts(citation)
@@ -107,23 +138,29 @@ class StatutesParser(StatutesProcessor):
         raise NoUnitMatched(unit)
 
     @staticmethod
-    def is_unit(token):
+    def is_unit(token: str):
         return regex.fullmatch("|".join(unit_patterns.keys()), token)
 
     @staticmethod
-    def is_pre_numb(token):
+    def is_pre_numb(token: str):
+        """
+        Token is a number that comes *before* the unit. E.g. '*erster* Halbsatz'
+        """
         return pre_numb_pattern.fullmatch(
             token,
         )
 
     @staticmethod
-    def is_numb(token):
+    def is_numb(token: str):
         return numb_pattern.fullmatch(
             token,
         )
 
     @staticmethod
     def fix_errors_in_citation(citation):
+        """
+        Fix some common inconsistencies in the references such as double spaces.
+        """
         result = regex.sub(r"\s+", " ", citation)
         result = regex.sub(r"§(?=\d)", "§ ", result)
         result = regex.sub(r",\sbis\s", " bis ", result)

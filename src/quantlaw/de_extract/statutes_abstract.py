@@ -21,6 +21,10 @@ class StatusMatch:
         self.end = end
 
     def has_main_area(self):
+        """
+        Returns True if the match has a main ares and thus its content can be parsed by
+        StatutesParser
+        """
         return False
 
 

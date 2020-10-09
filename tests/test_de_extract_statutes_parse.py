@@ -92,6 +92,17 @@ class DeParseAreasTestCase(unittest.TestCase):
             match,
         )
 
+    def test_for_docstring(self):
+        match = self.extractor.parse_main("§ 123 Abs. 4 Satz 5 und 6")
+        # If this test is changes also change the documentation for parse_main function.
+        self.assertEqual(
+            [
+                [["§", "123"], ["Abs", "4"], ["Satz", "5"]],
+                [["§", "123"], ["Abs", "4"], ["Satz", "6"]],
+            ],
+            match,
+        )
+
     def test_infer_units(self):
         match = self.extractor.parse_main("§ 123 Abs. 1, 2")
         self.assertEqual(
