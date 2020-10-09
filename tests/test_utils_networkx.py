@@ -225,6 +225,21 @@ class NetworkxTestCase(unittest.TestCase):
             ]
         )
 
+        H = quantlaw.utils.networkx.quotient_graph(G, "cluster", aggregation_attrs=None)
+        self.assertEqual(
+            [
+                (
+                    1,
+                    {},
+                ),
+                (
+                    2,
+                    {},
+                ),
+            ],
+            list(H.nodes(data=True)),
+        )
+
         H = quantlaw.utils.networkx.quotient_graph(G, "cluster")
         self.assertEqual(
             [
@@ -351,7 +366,7 @@ class NetworkxTestCase(unittest.TestCase):
             ]
         )
 
-        H = quantlaw.utils.networkx.quotient_graph(G, "law_name")
+        H = quantlaw.utils.networkx.quotient_graph(G, "law_name", root_level=None)
         self.assertEqual(
             [
                 (

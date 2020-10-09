@@ -10,6 +10,7 @@ class UtilsFilesTestCase(TestCase):
 
     def test_ensure_exists(self):
         ensure_exists(self.directory)
+        ensure_exists(self.directory)
         self.assertTrue(os.path.exists(self.directory))
 
     def test_list_dir(self):

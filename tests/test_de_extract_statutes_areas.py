@@ -27,6 +27,15 @@ class DeExtractAreasTestCase(unittest.TestCase):
             str(match),
         )
 
+    def test_immediate_end(self):
+        match = self.extractor.search(
+            "Art. 20a Abs. 1",
+        )
+        self.assertEqual(
+            "Main:Art. 20a Abs. 1;Suffix:;Law:;Type:internal",
+            str(match),
+        )
+
     def test_sgb(self):
         match = self.extractor.search("§ 123 Drittes Buch Sozialgesetzbuch")
         self.assertEqual(
