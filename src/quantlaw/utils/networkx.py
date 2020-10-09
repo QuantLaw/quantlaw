@@ -36,7 +36,7 @@ def induced_subgraph(G, filter_type, filter_attribute, filter_values):
     return sG
 
 
-def hierarchy_graph(G):
+def hierarchy_graph(G: nx.DiGraph):
     """
     Remove reference edges from G.
     Wrapper around induced_subgraph.
@@ -45,7 +45,7 @@ def hierarchy_graph(G):
     return hG
 
 
-def multi_to_weighted(G):
+def multi_to_weighted(G: nx.MultiDiGraph):
     """
     Converts a multidigraph into a weighted digraph.
     """
@@ -60,19 +60,27 @@ def multi_to_weighted(G):
     return nG
 
 
-def get_leaves(G):
+def get_leaves(G: nx.DiGraph):
+    """
+    Args:
+        G: A tree as directed graph with edges from root to leaves
+
+    Returns: Set of leaves of the tree G
+    """
     H = hierarchy_graph(G)
     return set([node for node in H.nodes if H.out_degree(node) == 0])
 
 
-def decay_function(key):
+def decay_function(key: int):
     """
     Returns a decay function to create a weighted sequence graph.
     """
     return lambda x: (x - 1) ** (-key)
 
 
-def sequence_graph(G, seq_decay_func=decay_function(1), seq_ref_ratio=1):
+def sequence_graph(
+    G: nx.MultiDiGraph, seq_decay_func=decay_function(1), seq_ref_ratio=1
+):
     """
     Creates sequence graph for G, consisting of seqitems and their cross-references
     only,
