@@ -22,7 +22,7 @@ class StatusMatch:
 
     def has_main_area(self):
         """
-        Returns True if the match has a main ares and thus its content can be parsed by
+        Returns True if the match has a main area and thus its content can be parsed by
         StatutesParser
         """
         return False
@@ -58,9 +58,6 @@ class StatutesMatchWithMainArea(StatusMatch):
         super().__init__(*args, **kwargs)
 
     def has_main_area(self):
-        """
-        Returns true if the match contains a main areas and its content can be parsed.
-        """
         return True
 
     def main_text(self):
