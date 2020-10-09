@@ -8,4 +8,7 @@ def ensure_exists(path):
 
 
 def list_dir(path, type):
+    """
+    List files in a folder given by the path filtered by type.
+    """
     return [f for f in os.listdir(path) if f.endswith(type)]
