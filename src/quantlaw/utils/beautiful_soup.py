@@ -4,11 +4,17 @@ from bs4 import BeautifulSoup
 
 
 def create_soup(path):
+    """
+    Reads a file and returns a lxml-xml BeautifulSoup object.
+    """
     with open(path, encoding="utf8") as f:
         return BeautifulSoup(f.read(), "lxml-xml")
 
 
-def save_soup(soup, path):
+def save_soup(soup: BeautifulSoup, path: str):
+    """
+    Writes an BeautifulSoup object to a file at a given path.
+    """
     try:
         with open(path, "w", encoding="utf8") as f:
             f.write(str(soup))
@@ -18,11 +24,12 @@ def save_soup(soup, path):
         raise
 
 
-def find_parent_with_name(tag, name):
+def find_parent_with_name(tag: str, name: str):
     """
-    :param tag: A tag of a BeautifulSoup
-    :param name: name to search in parents
-    :return: the nearest ancestor with the name
+    Args:
+        tag: A tag of a BeautifulSoup
+        name: name to search in parents
+    Returns: the nearest ancestor with the name
     """
     if tag.name == name:
         return tag
