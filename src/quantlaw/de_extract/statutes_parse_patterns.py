@@ -5,6 +5,11 @@ from regex import regex
 
 
 def generate_sgb_dict():
+    """
+    Returns a dictionary, Its keys are different ways how SGB books are cited. They are
+    mapped to values that represent the keys to the SGB books.
+
+    """
     sgb_dict_word = [
         "erst",
         "zweit",
@@ -37,14 +42,20 @@ def generate_sgb_dict():
 
     sgb_dict = {}
 
+    # Iterate through the 12 books and add different ways to cite them to the sgb_dict
     for idx in range(12):
         nr = idx + 1
         word = sgb_dict_word[idx]
         roman = sgb_dict_roman[idx]
+
+        # Books 9 and 10 appear to have a roman numbering in the abbreviation by
+        # juris and gesetze-im-internet. Abbreviations of the other books are always
+        # contain arabic numbering.
         if nr in {9, 10}:
             value = (f"SGB-{roman.upper()}", f"SGB-{nr}")
         else:
             value = f"SGB-{nr}"
+
         sgb_dict[f"{word} buch"] = value
         sgb_dict[f"{word} buch sozialgesetzbuch"] = value
         sgb_dict[f"{word} buch d sozialgesetzbuch"] = value
@@ -59,9 +70,6 @@ def generate_sgb_dict():
 
 sgb_dict = generate_sgb_dict()
 
-###########
-# Functions
-###########
 
 unit_patterns = {
     r"§{1,2}": "§",
@@ -80,11 +88,25 @@ unit_patterns = {
 }
 
 
-def stem_unit(unit):
+class NoUnitMatched(Exception):
+    pass
+
+
+def stem_unit(unit: str):
+    """
+    Brings units into a standard format. E.g. removes abbreviations, grammatical
+    differences spelling errors, etc.
+
+    Args:
+        unit: A string containing a unit that should be converted into a standard
+            format.
+
+    Returns: Unit in a standard format as string. E.g. §, Art, Nr, Halbsatz, Anhand, ...
+    """
     for unit_pattern in unit_patterns:
         if regex.fullmatch(unit_pattern, unit):
             return unit_patterns[unit_pattern]
-    raise Exception(unit)
+    raise NoUnitMatched(unit)
 
 
 def is_unit(token):

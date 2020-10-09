@@ -93,6 +93,11 @@ class StatutesMatchWithMainArea(StatusMatch):
 
 
 class StatutesProcessor:
+    """
+    Abstract class to extract and parse statute references.
+    The abstract class provides the names of laws they are cited with.
+    """
+
     def __init__(self, laws_lookup: dict):
         self._laws_lookup = None
         self.laws_lookup_keys = None
@@ -343,7 +348,7 @@ class StatutesParser(StatutesProcessor):
             law_text: E.g. "BGB"
             match_type: E.g. "dict"
 
-        Returns:
+        Returns: The key of a parse law.
 
         """
 
