@@ -1,4 +1,10 @@
+# This file contains regex pattern that are used to identify reference areas.
+
 from regex import regex
+
+###########
+# Main area
+###########
 
 # fmt: off
 reference_range_pattern_str = (
@@ -92,6 +98,12 @@ reference_range_pattern = regex.compile(
 )
 
 
+##########
+# Law name
+##########
+
+# The pattern to identify if a law name follows after the suffix.
+
 # fmt: off
 suffix_ignore_pattern_str = (
     r'^('
@@ -149,6 +161,7 @@ suffix_ignore_pattern_str = (
 # fmt: on
 suffix_ignore_pattern = regex.compile(suffix_ignore_pattern_str, flags=regex.IGNORECASE)
 
+# SGB law name pattern
 
 # fmt: off
 sgb_law_name_pattern_str = (
@@ -171,6 +184,7 @@ sgb_law_name_pattern_str = (
 # fmt: on
 sgb_law_name_pattern = regex.compile(sgb_law_name_pattern_str, flags=regex.IGNORECASE)
 
+# Patterns of names of european legislation
 
 # fmt: off
 eu_law_name_pattern_str = (
@@ -187,6 +201,7 @@ eu_law_name_pattern_str = (
 # fmt: on
 eu_law_name_pattern = regex.compile(eu_law_name_pattern_str, flags=regex.IGNORECASE)
 
+# Pattern of law names to ignore
 
 # fmt: off
 ignore_law_name_pattern_str = (

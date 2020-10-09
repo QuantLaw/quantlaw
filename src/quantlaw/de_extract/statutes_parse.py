@@ -122,7 +122,7 @@ class StatutesParser(StatutesProcessor):
     @staticmethod
     def stem_unit(unit: str):
         """
-        Brings units into a standard format. E.g. removes abbreviations, grammatical
+        Brings a unit into a standard format. E.g. removes abbreviations, grammatical
         differences spelling errors, etc.
 
         Args:
@@ -139,12 +139,16 @@ class StatutesParser(StatutesProcessor):
 
     @staticmethod
     def is_unit(token: str):
+        """
+        Returns: True if the token is a unit
+        """
         return regex.fullmatch("|".join(unit_patterns.keys()), token)
 
     @staticmethod
     def is_pre_numb(token: str):
         """
-        Token is a number that comes *before* the unit. E.g. '*erster* Halbsatz'
+        Returns: True if the token is a number that comes *before* the unit.
+        E.g. '*erster* Halbsatz'
         """
         return pre_numb_pattern.fullmatch(
             token,
@@ -152,6 +156,9 @@ class StatutesParser(StatutesProcessor):
 
     @staticmethod
     def is_numb(token: str):
+        """
+        Returns: True if the token is a 'numeric' value of the reference.
+        """
         return numb_pattern.fullmatch(
             token,
         )
@@ -169,9 +176,12 @@ class StatutesParser(StatutesProcessor):
     @staticmethod
     def split_citation_into_enum_parts(citation):
         """
-        Citation is into enumerative parts. The enumerative part consists of a list.
-        In most cases the list contains only one string.
-        If the list contains two strings, the part refers to a range.
+        A citation can contain references to multiple parts of the law.
+        E.g. '§§ 20 und 35' or 'Art. 3 Abs. 1 Satz 1, Abs. 3 Satz 1'.
+        The citation is split into parts so that each referenced section of the law is
+        separated. E.g. '§§ 20' and '35' resp. 'Art. 3 Abs. 1 Satz 1' and
+        'Abs. 3 Satz 1'.
+        However, ranges are not spit: E.g. "§§ 1 bis 10" will not be split.
         """
         enum_parts = split_citation_into_parts_pattern.split(
             citation,
@@ -185,6 +195,15 @@ class StatutesParser(StatutesProcessor):
 
     @staticmethod
     def split_parts_accidently_joined(reference_paths):
+        """
+        Reformats the parsed references to separate accitently joined references.
+        E.g. the original referehence "§ 123 § 126" will not be split by
+        split_citation_into_enum_parts because the separation is falsly not indicated by
+        a ',', 'or' etc. It come from the unit '§' that it can be inferred that the
+        citation contains references to two parts of statutes.
+        This function accounts for the case that the unit '§' or 'Art' appears twice in
+        the same reference path and split the path into several elements.
+        """
         new_reference_paths = []
         main_unit = (
             "Art"
@@ -206,6 +225,13 @@ class StatutesParser(StatutesProcessor):
 
     @staticmethod
     def infer_units(reference_path, prev_reference_path):
+        """
+        In some cases of an enumeration a numeric value is not directed prefixed by
+        the corresponding unit. E.g. "§ 123 Abs. 1 S. 2, 3 S. 4". In this case "3"
+        is not prefixed with its unit. Instead it can be inferred by looking at the
+        whole citation that it is next higher unit of "S.", hence "Abs.". These
+        inferred units are added to parsed data.
+        """
         prev_path_units = [o[0] for o in prev_reference_path]
         if reference_path[0][0]:
             pass
@@ -227,7 +253,21 @@ class StatutesParser(StatutesProcessor):
             reference_path[0:0] = prev_reference_path
 
     @staticmethod
-    def split_citation_part(string):
+    def split_citation_part(string: str):
+        """
+        A string a tokenizes. Tokens are identified as units or values. Pairs are
+        built to connect the units with their respective values. If the unit cannot
+        be indentified (and must be inferred later) None is returned.
+
+        Args:
+            string: A string that is part of a reference and cites *one* part a statute.
+
+        Retruns: As a generator tuples are returned, each containing the unit (or None)
+            and the respecive value.
+        """
+
+        # Tokenization
+
         # fmt: off
         string = regex.sub(
             r"("
@@ -244,6 +284,9 @@ class StatutesParser(StatutesProcessor):
         tokens = split_unit_number_pattern.split(
             string,
         )
+
+        # Building pairs of units with their resp. values
+
         while len(tokens) > 0:
             token = tokens.pop(0)
             if StatutesParser.is_unit(token):

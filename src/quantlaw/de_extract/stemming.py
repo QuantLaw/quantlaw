@@ -11,7 +11,11 @@ def stem_law_name(name):
     return clean_name(result)
 
 
-def clean_name(name):
+def clean_name(name: str) -> str:
+    """
+    Bring the name into a standard format by replacing multiple spaces and characters
+    specific for German language
+    """
     result = re.sub(r"\s+", " ", name)
     return (
         result.replace("ß", "ss")

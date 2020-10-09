@@ -155,7 +155,11 @@ class StatutesExtractor(StatutesProcessor):
         return len(match_raw)
 
     @staticmethod
-    def get_no_suffix_ignore_law_name_len(test_str):
+    def get_no_suffix_ignore_law_name_len(test_str) -> int:
+        """
+        Returns: Length of the law name in chars, if no suffix is present that connects
+            the main area with the law name or 0 if no law name of this type was found
+        """
 
         match = ignore_law_name_pattern.match(
             test_str,
@@ -164,7 +168,11 @@ class StatutesExtractor(StatutesProcessor):
         return len(match[0]) if match else 0
 
     @staticmethod
-    def get_sgb_law_name_len(test_str):
+    def get_sgb_law_name_len(test_str) -> int:
+        """
+        Returns: The length of the SGB law name in chars or 0 if no law name of this
+            type was found
+        """
 
         match = sgb_law_name_pattern.match(
             test_str,
@@ -173,7 +181,11 @@ class StatutesExtractor(StatutesProcessor):
         return len(match[0]) if match else 0
 
     @staticmethod
-    def get_eu_law_name_len(test_str):
+    def get_eu_law_name_len(test_str) -> int:
+        """
+        Returns: The length of the law name of european legislation in chars or
+            0 if no law name of this type was found
+        """
         match = eu_law_name_pattern.match(
             test_str,
         )
@@ -181,5 +193,9 @@ class StatutesExtractor(StatutesProcessor):
 
     @staticmethod
     def get_ignore_law_name_len(test_str):
+        """
+        Returns: Th length of a law name to ignore in chars or 0 if no law name of
+            this type was found
+        """
         match = suffix_ignore_pattern.match(test_str)
         return len(match[0]) if match else 0
