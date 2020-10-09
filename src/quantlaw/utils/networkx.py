@@ -160,8 +160,6 @@ def quotient_graph(
     attribute_data = {
         k: (v if v is not None else -1) for k, v in attribute_data.items()
     }
-    # unique values in that map
-    unique_values = sorted(list(set(attribute_data.values())))
 
     # remove the root if root_level is given
     root = None
@@ -169,7 +167,9 @@ def quotient_graph(
         roots = [x for x in G.nodes() if G.nodes[x]["level"] == root_level]
         if roots:
             root = roots[0]
-            unique_values.remove(root)
+
+    # unique values in that map with root node
+    unique_values = sorted({v for k, v in attribute_data.items() if k != root})
 
     # build a new MultiDiGraph
     nG = nx.MultiDiGraph()

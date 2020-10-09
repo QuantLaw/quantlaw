@@ -147,6 +147,13 @@ class NetworkxTestCase(unittest.TestCase):
         G.add_nodes_from(
             [
                 (
+                    "root",
+                    {
+                        "level": -1,
+                        "cluster": None,
+                    },
+                ),
+                (
                     "1_04",
                     {
                         "chars_n": 10,
@@ -244,5 +251,141 @@ class NetworkxTestCase(unittest.TestCase):
         )
         self.assertEqual(
             [(2, 1, {"edge_type": "reference"})],
+            list(H.edges(data=True)),
+        )
+
+        H = quantlaw.utils.networkx.quotient_graph(
+            G,
+            "cluster",
+            edge_types=["sequence"],
+        )
+        self.assertEqual(
+            [
+                (
+                    1,
+                    {
+                        "chars_n": 20,
+                        "chars_nowhites": 16,
+                        "tokens_n": 4,
+                        "tokens_unique": 2,
+                    },
+                ),
+                (
+                    2,
+                    {
+                        "chars_n": 20,
+                        "chars_nowhites": 16,
+                        "tokens_n": 4,
+                        "tokens_unique": 2,
+                    },
+                ),
+            ],
+            list(H.nodes(data=True)),
+        )
+        self.assertEqual(
+            [
+                (1, 2, {"edge_type": "sequence", "weight": 1.0}),
+                (2, 1, {"edge_type": "sequence", "weight": 1.0}),
+            ],
+            list(H.edges(data=True)),
+        )
+
+    def test_quotient_graph_copy_node_attrs(self):
+        G = nx.DiGraph(name="x")
+        G.add_nodes_from(
+            [
+                (
+                    "1_01",
+                    {
+                        "heading": "Bürgerliches Gesetzbuch",
+                        "more_info": "test",
+                        "chars_n": 10,
+                        "chars_nowhites": 8,
+                        "tokens_n": 2,
+                        "tokens_unique": 1,
+                        "law_name": "Bürgerliches Gesetzbuch",
+                        "level": 3,
+                    },
+                ),
+                (
+                    "2_02",
+                    {
+                        "heading": "1. Buch",
+                        "chars_n": 10,
+                        "chars_nowhites": 8,
+                        "tokens_n": 2,
+                        "tokens_unique": 1,
+                        "cluster": 2,
+                        "law_name": "Zivilprozessordnung",
+                        "level": 3,
+                    },
+                ),
+                (
+                    "2_15",
+                    {
+                        "heading": "2. Buch",
+                        "chars_n": 10,
+                        "chars_nowhites": 8,
+                        "tokens_n": 2,
+                        "tokens_unique": 1,
+                        "cluster": 2,
+                        "law_name": "Zivilprozessordnung",
+                        "level": 3,
+                    },
+                ),
+            ]
+        )
+        G.add_edges_from(
+            [
+                ("1_01", "2_02", {"edge_type": "reference", "weight": 1 / 23}),
+                (
+                    "2_02",
+                    "2_15",
+                    {"backwards": False, "edge_type": "sequence", "weight": 1.0},
+                ),
+                (
+                    "2_02",
+                    "2_15",
+                    {"backwards": True, "edge_type": "sequence", "weight": 1.0},
+                ),
+            ]
+        )
+
+        H = quantlaw.utils.networkx.quotient_graph(G, "law_name")
+        self.assertEqual(
+            [
+                (
+                    "Bürgerliches Gesetzbuch",
+                    {
+                        "chars_n": 10,
+                        "chars_nowhites": 8,
+                        "heading": "Bürgerliches Gesetzbuch",
+                        "law_name": "Bürgerliches Gesetzbuch",
+                        "level": 3,
+                        "more_info": "test",
+                        "tokens_n": 2,
+                        "tokens_unique": 1,
+                    },
+                ),
+                (
+                    "Zivilprozessordnung",
+                    {
+                        "chars_n": 20,
+                        "chars_nowhites": 16,
+                        "tokens_n": 4,
+                        "tokens_unique": 2,
+                    },
+                ),
+            ],
+            list(H.nodes(data=True)),
+        )
+        self.assertEqual(
+            [
+                (
+                    "Bürgerliches Gesetzbuch",
+                    "Zivilprozessordnung",
+                    {"edge_type": "reference"},
+                )
+            ],
             list(H.edges(data=True)),
         )

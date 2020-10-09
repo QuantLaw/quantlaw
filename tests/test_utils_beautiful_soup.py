@@ -39,6 +39,19 @@ class UtilsBeautifulSoupTestCase(TestCase):
         with self.assertRaises(OSError):
             save_soup(soup, 100)
 
+    def test_save_soup_failed(self):
+        class TestException(Exception):
+            pass
+
+        class FailingTestObj:
+            def __str__(self):
+                raise TestException()
+
+        with self.assertRaises(TestException):
+            save_soup(FailingTestObj(), "temp2.xml")
+
+        self.assertFalse(os.path.exists("temp2.xml"))
+
     def test_find_parent_with_name(self):
         soup = create_soup(self.source_filename)
         base_tag = soup.find("section")
