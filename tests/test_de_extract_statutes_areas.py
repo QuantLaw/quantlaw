@@ -1,11 +1,14 @@
 import unittest
 
-from quantlaw.de_extract.statutes import StatutesExtractor
+from quantlaw.de_extract.statutes_areas import StatutesExtractor
 
 sample_laws_lookup = {"buergerlich gesetzbuch": "BGB", "grundgesetz": "GG"}
 
 
-class DeExtractTestCase(unittest.TestCase):
+class DeExtractAreasTestCase(unittest.TestCase):
+    def setUp(self) -> None:
+        self.extractor = StatutesExtractor(sample_laws_lookup)
+
     def test_basic_extracting(self):
         extractor = StatutesExtractor(sample_laws_lookup)
         match = extractor.search(
@@ -15,25 +18,7 @@ class DeExtractTestCase(unittest.TestCase):
             "Main:§ 123 Abs. 3;Suffix: des ;Law:Bürgerliches Gesetzbuches;Type:dict",
             str(match),
         )
-
-    def test_laws_lookup_property(self):
-        extractor = StatutesExtractor(sample_laws_lookup)
-        self.assertEqual(
-            sample_laws_lookup,
-            extractor.laws_lookup,
-        )
-        self.assertEqual(
-            ["grundgesetz", "buergerlich gesetzbuch"], extractor.laws_lookup_keys
-        )
-        another_dict = {"abc": "efg"}
-        extractor.laws_lookup = another_dict
-        self.assertEqual(another_dict, extractor.laws_lookup)
-        self.assertEqual(["abc"], extractor.laws_lookup_keys)
-
-
-class DeExtractVariationsTestCase(unittest.TestCase):
-    def setUp(self) -> None:
-        self.extractor = StatutesExtractor(sample_laws_lookup)
+        self.assertTrue(match.has_main_area())
 
     def test_dict(self):
         match = self.extractor.search("Art. 20a Abs. 1 Grundgesetz")

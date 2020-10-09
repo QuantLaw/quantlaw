@@ -1,6 +1,6 @@
 from unittest.case import TestCase
 
-from quantlaw.de_extract.statutes_patterns import reference_range_pattern
+from quantlaw.de_extract.statutes_areas_patterns import reference_range_pattern
 
 
 class StatuteParsePatternsTextCase(TestCase):
