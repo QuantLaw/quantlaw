@@ -109,22 +109,22 @@ class StatutesProcessor:
 
     @property
     def laws_lookup(self) -> dict:
+        """
+        A dictionary to find of the law names to extract.
+        Keys are names of laws that are used in the source text used to cite
+        laws. Values are unique identifiers of laws.
+        For optimal results is is recommended to make the list a exhaustive as
+        possible to reduce the chance that references are false treated as
+        internal references within a law because the name of the referenced law
+        is not recognized. The names of the laws should be provided in a
+        stemmed format using the stemmer provided in
+        `quantlaw.de_extract.stemming.stem_law_name`.
+        """
         return self._laws_lookup
 
     @laws_lookup.setter
     def laws_lookup(self, val: dict):
-        """
-        Args:
-            val: A dictionary to find of the law names to extract.
-                Keys are names of laws that are used in the source text used to cite
-                laws. Values are unique identifiers of laws.
-                For optimal results is is recommended to make the list a exhaustive as
-                possible to reduce the chance that references are false treated as
-                internal references within a law because the name of the referenced law
-                is not recognized. The names of the laws should be provided in a
-                stemmed format using the stemmer provided in
-                `quantlaw.de_extract.stemming.stem_law_name`.
-        """
+
         self._laws_lookup = val
 
         # Sort be decreasing string length to favor matches of long law names.
