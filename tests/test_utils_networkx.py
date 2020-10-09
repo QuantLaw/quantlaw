@@ -404,3 +404,11 @@ class NetworkxTestCase(unittest.TestCase):
             ],
             list(H.edges(data=True)),
         )
+
+        # Test an if statement
+        J = quantlaw.utils.networkx.quotient_graph(
+            G,
+            "law_name",
+        )
+        self.assertEqual(list(H.nodes(data=True)), list(J.nodes(data=True)))
+        self.assertEqual(list(H.edges(data=True)), list(J.edges(data=True)))
