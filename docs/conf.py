@@ -286,4 +286,5 @@ intersphinx_mapping = {
     'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
 }
 
-autodoc_mock_imports = ['bs4', 'regex', 'networkx']
+# autodoc_mock_imports = ['bs4', 'regex', 'networkx']
+
