@@ -103,6 +103,19 @@ class DeParseAreasTestCase(unittest.TestCase):
             match,
         )
 
+    def test_for_readme(self):
+        # If this test is changes also change the readme.
+        match = self.extractor.parse_main("§ 111d Absatz 1 Satz 2")
+        self.assertEqual(
+            [[["§", "111d"], ["Abs", "1"], ["Satz", "2"]]],
+            match,
+        )
+        match = self.extractor.parse_main("§ 91")
+        self.assertEqual(
+            [[["§", "91"]]],
+            match,
+        )
+
     def test_infer_units(self):
         match = self.extractor.parse_main("§ 123 Abs. 1, 2")
         self.assertEqual(
