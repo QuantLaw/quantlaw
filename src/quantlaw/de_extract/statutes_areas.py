@@ -63,6 +63,19 @@ class StatutesExtractor(StatutesProcessor):
 
         return statutes_match
 
+    def find_all(self, text: str, pos: int = 0):
+        """
+        Like search but returns a generator of all matches found in text
+        """
+        curr_pos = pos
+        match = self.search(text, curr_pos)
+        while match:
+            yield match
+            curr_pos = match.end
+            if match.has_main_area():
+                curr_pos += match.suffix_len + match.law_len
+            match = self.search(text, curr_pos)
+
     def get_suffix_and_law_name(self, string: str):
         """
         Returns: A tuple containing length of

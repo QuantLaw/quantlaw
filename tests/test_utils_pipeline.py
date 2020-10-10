@@ -4,6 +4,8 @@ from quantlaw.utils.pipeline import PipelineStep
 
 
 class SampleStep(PipelineStep):
+    max_number_of_processes = 2
+
     def get_items(self):
         return range(50)
 

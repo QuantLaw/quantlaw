@@ -43,10 +43,13 @@ class StatutesParser(StatutesProcessor):
         Parses a string containing a reference to a specific section within a given law.
         E.g. "§ 123 Abs. 4 Satz 5 und 6".
         The parsed informtaion is formatted into lists nested in lists nested in lists.
-        - The outer list is a list of references.
-        - References are lists of path components. A path component is e.g. "Abs. 4".
-        - A path component is represented by a list with two elements: The first
-            contains the unit the second the value.
+
+        The outer list is a list of references.
+
+        References are lists of path components. A path component is e.g. "Abs. 4".
+
+        A path component is represented by a list with two elements: The first
+        contains the unit the second the value.
 
         The example above would be represented as
         `[[['§', '123'], ['Abs', '4'], ['Satz', '5']],

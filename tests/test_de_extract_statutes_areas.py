@@ -104,3 +104,13 @@ class DeExtractAreasTestCase(unittest.TestCase):
     def test_trigger_without_main(self):
         match = self.extractor.search("Lorem § ipsum")
         self.assertFalse(match.has_main_area())
+
+    def test_find_all(self):
+        matches = self.extractor.find_all("Art. 123a der asdasdasd § 123 Grundgesetz")
+        self.assertEqual(
+            [
+                "Main:Art. 123a;Suffix: der ;Law:;Type:unknown",
+                "Main:§ 123;Suffix: ;Law:Grundgesetz;Type:dict",
+            ],
+            [str(m) for m in matches],
+        )
