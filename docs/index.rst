@@ -27,7 +27,7 @@ Contents
 ========
 
 .. toctree::
-   :maxdepth: 6
+   :maxdepth: 8
 
    License <license>
    Authors <authors>
