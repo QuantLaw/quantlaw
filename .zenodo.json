@@ -1,0 +1,26 @@
+{
+  "description": "Coding utilities for quantitative legal studies",
+  "title": "quantlaw Package Release",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "QuantLaw Research Group"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "Janis Beckedorf",
+      "orcid": "0000-0001-9672-9928",
+      "type": "Researcher"
+    },
+    {
+      "name": "Corinna Coupette",
+      "orcid": "0000-0001-9151-2092",
+      "type": "Researcher"
+    }
+  ],
+  "keywords": [
+  ],
+  "access_right": "open",
+  "license": "BSD-3-Clause"
+}
