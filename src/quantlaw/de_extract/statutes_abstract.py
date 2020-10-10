@@ -27,6 +27,9 @@ class StatusMatch:
         """
         return False
 
+    def __str__(self):
+        return f"Text:{self.text[self.start:self.end]};"
+
 
 class StatutesMatchWithMainArea(StatusMatch):
     """
