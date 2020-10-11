@@ -31,7 +31,7 @@ class PipelineStep:
             for item in items:
                 results.append(self.execute_item(item, *self.execute_args))
 
-        return results
+        return self.finish_execution(results)
 
     def execute_filtered_items(self, items, filters, *args, **kwargs):
         filtered_items = []
@@ -42,3 +42,6 @@ class PipelineStep:
                     break
 
         return self.execute_items(filtered_items, *args, **kwargs)
+
+    def finish_execution(self, results):
+        return results
