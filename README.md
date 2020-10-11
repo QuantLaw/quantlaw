@@ -29,7 +29,7 @@ der *Insolvenzordnung* keine Anwendung."
 The extracted data would be:
 
 1. `[[['§', '111d'], ['Abs', '1'], ['Satz', '2']]]` for the law `StPO`
-2. `[[['§', '91']]]` for the law `InsO
+2. `[[['§', '91']]]` for the law `InsO`
 
 Getting started in the documentation contains a minimal example.
 
