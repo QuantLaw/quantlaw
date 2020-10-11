@@ -6,9 +6,9 @@ Contributors
 * Corinna Coupette
 
 
-=============
+-------------
 Collaborators
-=============
+-------------
 
 * Dirk Hartung
 * Daniel Martin Katz
