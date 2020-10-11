@@ -38,3 +38,5 @@ class PipelineTestCase(unittest.TestCase):
         items = ["aa", "bab", "cc", "caad"]
         result = step.execute_filtered_items(items, ["aa", "cc"])
         self.assertEqual(["xaayaz", "xccyaz", "xcaadyaz"], result)
+        result = step.execute_filtered_items(items)
+        self.assertEqual(["xaayaz", "xbabyaz", "xccyaz", "xcaadyaz"], result)
