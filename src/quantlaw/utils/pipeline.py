@@ -33,13 +33,16 @@ class PipelineStep:
 
         return self.finish_execution(results)
 
-    def execute_filtered_items(self, items, filters, *args, **kwargs):
-        filtered_items = []
-        for item in list(items):
-            for filter_str in filters:
-                if filter_str in item:
-                    filtered_items.append(item)
-                    break
+    def execute_filtered_items(self, items, filters=None, *args, **kwargs):
+        if filters:
+            filtered_items = []
+            for item in list(items):
+                for filter_str in filters:
+                    if filter_str in item:
+                        filtered_items.append(item)
+                        break
+        else:
+            filtered_items = items
 
         return self.execute_items(filtered_items, *args, **kwargs)
 
