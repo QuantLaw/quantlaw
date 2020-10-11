@@ -97,7 +97,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'quantlaw'
-copyright = u'2020, Janis Beckedorf'
+copyright = u'2020, QuantLaw Research Group'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -251,7 +251,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'user_guide.tex', u'quantlaw Documentation',
-   u'Janis Beckedorf', 'manual'),
+   u'QuantLaw Research Group', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
