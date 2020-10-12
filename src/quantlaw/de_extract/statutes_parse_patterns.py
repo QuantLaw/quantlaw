@@ -72,7 +72,7 @@ unit_patterns = {
     r"§{1,2}": "§",
     r"Art\b\.?|[Aa]rtikels?n?": "Art",
     r"Nr\b\.?|Nummer|Nrn?\b\.?": "Nr",
-    r"[Aa][Bb]s\b\.?|Absatz|Absätze": "Abs",
+    r"[Aa][Bb][Ss]\b\.?|Absatz|Absätze": "Abs",
     r"Unter[Aa]bsatz|Unter[Aa]bs\b\.?": "Uabs",
     r"S\b\.?|Satz|Sätze": "Satz",
     r"Ziffern?|Ziffn?\b\.?": "Ziffer",
