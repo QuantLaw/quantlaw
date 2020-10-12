@@ -307,8 +307,8 @@ class StatutesParser(StatutesProcessor):
             elif StatutesParser.is_pre_numb(token):
                 numb = token
                 token = tokens.pop(0)
-                if not is_unit(token):
-                    print(token, "is not a unit in", string, "debug context", debug_context)
+                if not StatutesParser.is_unit(token):
+                    print(token, "is not a unit in", string)
                     continue
                     # to fix citation "§ 30 DRITTER ABSCHNITT"
                     # Last part in now ignored, but reference areas can still be improved.
