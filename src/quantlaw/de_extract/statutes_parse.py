@@ -311,9 +311,10 @@ class StatutesParser(StatutesProcessor):
                     print(token, "is not a unit in", string)
                     continue
                     # to fix citation "§ 30 DRITTER ABSCHNITT"
-                    # Last part in now ignored, but reference areas can still be improved.
+                    # Last part in now ignored,
+                    # but reference areas can still be improved.
                 unit = StatutesParser.stem_unit(token)
-                
+
             elif StatutesParser.is_numb(token):
                 unit = None
                 numb = token
