@@ -170,7 +170,7 @@ sgb_law_name_pattern_str = (
         r"erst|zweit|dritt|viert|fünft|sechst|siebt|acht|neunt|zehnt|elft|"
         r"zwölft|\d{1,2}\."
     r")"
-    r"en?s? buche?s?(( des)? sozialgesetzbuche?s?)?"
+    r"e(n|s)? buche?s?(( des)? sozialgesetzbuche?s?)?"
     r"|"
     r"SGB"
     r"(\s|\-)"
