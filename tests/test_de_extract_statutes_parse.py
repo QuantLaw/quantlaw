@@ -169,3 +169,10 @@ class DeParseAreasTestCase(unittest.TestCase):
         self.assertEqual("Art", unit)
         with self.assertRaises(NoUnitMatched):
             StatutesParser.stem_unit("Clause")
+
+    def test_wrong_pre_numb(self):
+        match = self.extractor.parse_main("§ 30 DRITTER ABSCHNITT")
+        self.assertEqual(
+            [[["§", "30"]]],
+            match,
+        )
