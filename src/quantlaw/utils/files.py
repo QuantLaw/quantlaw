@@ -15,4 +15,4 @@ def list_dir(path: str, type: str):
     """
     List files in a folder given by the path filtered by type.
     """
-    return [f for f in os.listdir(path) if f.endswith(type)]
+    return sorted(f for f in os.listdir(path) if f.endswith(type))
