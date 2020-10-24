@@ -55,3 +55,10 @@ Related Repositories:
 - [Legal Data Clustering](https://github.com/QuantLaw/legal-data-clustering) ([First Publication Release](http://dx.doi.org/10.5281/zenodo.4070775))
 
 Related Data: [Preprocessed Input Data for *Sci. Rep.* **10** (2020)](http://dx.doi.org/10.5281/zenodo.4070767)
+
+## Collaboration
+
+Please format the code using `isort`, `black`, and `flake8`. An convenient option to
+ensure correct formatting of the code is to
+[pip install pre-commit](https://pypi.org/project/pre-commit/) and run
+`pre-commit install` to add code checking and reformatting as git pre-commit hook.
