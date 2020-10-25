@@ -7,7 +7,7 @@ import zipfile
 import lxml.etree
 import requests
 
-from src.quantlaw.de_extract.stemming import stem_law_name
+from quantlaw.de_extract.stemming import stem_law_name
 
 
 def load_law_names(date, path):
