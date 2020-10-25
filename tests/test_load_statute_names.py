@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.quantlaw.de_extract.load_statute_names import load_law_names
+from quantlaw.de_extract.load_statute_names import load_law_names
 
 
 class LoadStatueNamesTestCase(TestCase):
