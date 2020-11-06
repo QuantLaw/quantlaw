@@ -15,10 +15,10 @@ def load_law_names(date, path):
         f"https://github.com/QuantLaw/gesetze-im-internet/archive/{date}.zip",
         stream=True,
     )
-    if r.status_code == 200:
-        with open(path + ".zip", "wb") as f:
-            r.raw.decode_content = True
-            shutil.copyfileobj(r.raw, f)
+    assert r.status_code == 200
+    with open(path + ".zip", "wb") as f:
+        r.raw.decode_content = True
+        shutil.copyfileobj(r.raw, f)
 
     law_names = {}
 
