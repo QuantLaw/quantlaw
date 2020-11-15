@@ -1,7 +1,9 @@
 import networkx as nx
 
 
-def induced_subgraph(G, filter_type, filter_attribute, filter_values, ignore_attrs=False):
+def induced_subgraph(
+    G, filter_type, filter_attribute, filter_values, ignore_attrs=False
+):
     """
     Create custom induced subgraph.
 
