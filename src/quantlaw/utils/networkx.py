@@ -206,7 +206,7 @@ def quotient_graph(
                 attribute_data[e[0]], attribute_data[e[1]], edge_type=e[-1]["edge_type"]
             )
             if e[-1]["edge_type"] == "sequence":
-                nG.edges[attribute_data[e[0]], attribute_data[e[1]], k]["weight"] = es
+                nG.edges[attribute_data[e[0]], attribute_data[e[1]], k]["weight"] = e[
                     -1
                 ]["weight"]
 
