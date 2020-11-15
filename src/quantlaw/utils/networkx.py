@@ -1,7 +1,7 @@
 import networkx as nx
 
 
-def induced_subgraph(G, filter_type, filter_attribute, filter_values):
+def induced_subgraph(G, filter_type, filter_attribute, filter_values, ignore_attrs=False):
     """
     Create custom induced subgraph.
 
@@ -19,7 +19,7 @@ def induced_subgraph(G, filter_type, filter_attribute, filter_values):
         sG = nx.induced_subgraph(G, nodes)
     elif filter_type == "edge":
         sG = nx.MultiDiGraph()
-        sG.add_nodes_from(G.nodes(data=True))
+        sG.add_nodes_from(G.nodes(data=not ignore_attrs))
         sG.add_edges_from(
             [
                 (e[0], e[1], e[-1])
@@ -36,12 +36,12 @@ def induced_subgraph(G, filter_type, filter_attribute, filter_values):
     return sG
 
 
-def hierarchy_graph(G: nx.DiGraph):
+def hierarchy_graph(G: nx.DiGraph, ignore_attrs=False):
     """
     Remove reference edges from G.
     Wrapper around induced_subgraph.
     """
-    hG = induced_subgraph(G, "edge", "edge_type", ["containment"])
+    hG = induced_subgraph(G, "edge", "edge_type", ["containment"], ignore_attrs)
     return hG
 
 
@@ -67,7 +67,7 @@ def get_leaves(G: nx.DiGraph):
 
     Returns: Set of leaves of the tree G
     """
-    H = hierarchy_graph(G)
+    H = hierarchy_graph(G, ignore_attrs=True)
     return set([node for node in H.nodes if H.out_degree(node) == 0])
 
 
@@ -94,7 +94,7 @@ def sequence_graph(
 
     """
 
-    hG = hierarchy_graph(G)
+    hG = hierarchy_graph(G, ignore_attrs=True)
     # make sure we get _all_ seqitems as leaves, not only the ones without outgoing
     # references
     leaves = [n for n in hG.nodes() if hG.out_degree(n) == 0]
@@ -206,7 +206,7 @@ def quotient_graph(
                 attribute_data[e[0]], attribute_data[e[1]], edge_type=e[-1]["edge_type"]
             )
             if e[-1]["edge_type"] == "sequence":
-                nG.edges[attribute_data[e[0]], attribute_data[e[1]], k]["weight"] = e[
+                nG.edges[attribute_data[e[0]], attribute_data[e[1]], k]["weight"] = es
                     -1
                 ]["weight"]
 
