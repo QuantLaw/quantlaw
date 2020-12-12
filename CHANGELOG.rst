@@ -17,3 +17,9 @@ Version 0.0.2
 - Minor improvements to parse patterns
 - Minor improvement to file utils: Results of list_dir are now sorted
 - Add zenodo to readme
+
+
+Version 0.0.3
+=============
+
+- Improve performance of networkx utilities
