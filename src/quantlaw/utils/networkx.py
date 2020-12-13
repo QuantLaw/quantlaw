@@ -1,4 +1,7 @@
+import os
+
 import networkx as nx
+import pandas as pd
 
 
 def induced_subgraph(
@@ -237,3 +240,59 @@ def aggregate_attr_in_quotient_graph(nG, G, new_nodes, aggregation_attrs):
         for community_id, nodes in new_nodes.items():
             aggregated_value = sum(attr_data.get(n) for n in nodes)
             nG.nodes[community_id][attr] = aggregated_value
+
+
+def load_graph_from_csv_files(
+    crossreference_folder, file_basename, filter="exclude_subseqitems"
+):
+    """
+    Loads a networkx MultiDiGraph from a nodelist and edgelist
+    formatted as .csv.gz files.
+    The node csv must have a 'key' column that serves as a node key.
+    Other columns are added as node attributes.
+    The edge csv must have a the columns 'u', 'v', 'edge_type'.
+    If filter is node all nodes will be loaded.
+    By default subeqitems will be excluded.
+    If filter is a callable, it is called with a pandas.DataFrame loaded
+    from the csv as the only argument.
+    The callable must return values to filter the DataFrame.
+    """
+    nodes_csv_path = os.path.join(
+        crossreference_folder, f"{file_basename}.nodes.csv.gz"
+    )
+    edges_csv_path = os.path.join(
+        crossreference_folder, f"{file_basename}.edges.csv.gz"
+    )
+
+    G = nx.MultiDiGraph(name=str(file_basename))
+
+    nodes_df = pd.read_csv(nodes_csv_path)
+
+    if filter == "exclude_subseqitems":
+        nodes_df = nodes_df[nodes_df.type != "subseqitem"]
+    elif callable(filter):
+        nodes_df = nodes_df[filter(nodes_df)]
+
+    G.add_nodes_from(list(nodes_df.key))
+    for column in nodes_df.columns:
+        attrs_dict = {
+            k: v for k, v in zip(nodes_df.key, nodes_df[column]) if v and not pd.isna(v)
+        }
+        nx.set_node_attributes(
+            G,
+            attrs_dict,
+            column,
+        )
+
+    all_nodes = set(nodes_df.key)
+    del nodes_df
+    edges_df = pd.read_csv(edges_csv_path)
+    edges = [
+        (u, v, {"edge_type": edge_type})
+        for u, v, edge_type in zip(edges_df.u, edges_df.v, edges_df.edge_type)
+        if u in all_nodes and v in all_nodes
+    ]
+    del edges_df
+    G.add_edges_from(edges)
+
+    return G

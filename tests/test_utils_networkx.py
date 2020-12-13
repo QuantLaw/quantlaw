@@ -1,9 +1,15 @@
+import os
+import tempfile
 import unittest
 
 import networkx as nx
+import pandas as pd
 
 import quantlaw
-from quantlaw.utils.networkx import aggregate_attr_in_quotient_graph
+from quantlaw.utils.networkx import (
+    aggregate_attr_in_quotient_graph,
+    load_graph_from_csv_files,
+)
 
 
 class NetworkxTestCase(unittest.TestCase):
@@ -412,3 +418,74 @@ class NetworkxTestCase(unittest.TestCase):
         )
         self.assertEqual(list(H.nodes(data=True)), list(J.nodes(data=True)))
         self.assertEqual(list(H.edges(data=True)), list(J.edges(data=True)))
+
+    def test_load_graph_fromcsv(self):
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            # Setup
+            pd.DataFrame(
+                {
+                    "key": ["a", "b", "c", "d"],
+                    "type": ["item", "seqitem", "subseqitem", None],
+                }
+            ).to_csv(os.path.join(tmpdirname, "2000.nodes.csv.gz"), index=False)
+
+            pd.DataFrame(
+                {
+                    "u": ["a", "a", "c", "d"],
+                    "v": ["b", "b", "d", "c"],
+                    "edge_type": ["x", "x", "x", "x"],
+                }
+            ).to_csv(os.path.join(tmpdirname, "2000.edges.csv.gz"))
+
+            g = load_graph_from_csv_files(
+                tmpdirname,
+                "2000",
+            )
+            self.assertEqual(
+                list(g.nodes(data=True)),
+                [
+                    ("a", {"key": "a", "type": "item"}),
+                    ("b", {"key": "b", "type": "seqitem"}),
+                    ("d", {"key": "d"}),
+                ],
+            )
+            self.assertEqual(
+                list(g.edges(data=True)),
+                [("a", "b", {"edge_type": "x"}), ("a", "b", {"edge_type": "x"})],
+            )
+
+            g = load_graph_from_csv_files(tmpdirname, "2000", filter=None)
+            self.assertEqual(
+                list(g.nodes(data=True)),
+                [
+                    ("a", {"key": "a", "type": "item"}),
+                    ("b", {"key": "b", "type": "seqitem"}),
+                    ("c", {"key": "c", "type": "subseqitem"}),
+                    ("d", {"key": "d"}),
+                ],
+            )
+            self.assertEqual(
+                list(g.edges(data=True)),
+                [
+                    ("a", "b", {"edge_type": "x"}),
+                    ("a", "b", {"edge_type": "x"}),
+                    ("c", "d", {"edge_type": "x"}),
+                    ("d", "c", {"edge_type": "x"}),
+                ],
+            )
+
+            g = load_graph_from_csv_files(
+                tmpdirname, "2000", filter=lambda df: [v != "a" for v in df.key]
+            )
+            self.assertEqual(
+                list(g.nodes(data=True)),
+                [
+                    ("b", {"key": "b", "type": "seqitem"}),
+                    ("c", {"key": "c", "type": "subseqitem"}),
+                    ("d", {"key": "d"}),
+                ],
+            )
+            self.assertEqual(
+                list(g.edges(data=True)),
+                [("c", "d", {"edge_type": "x"}), ("d", "c", {"edge_type": "x"})],
+            )

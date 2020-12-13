@@ -19,5 +19,6 @@
 beautifulsoup4
 lxml
 networkx>=2.4
+pandas
 regex
 requests
