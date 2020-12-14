@@ -23,3 +23,9 @@ Version 0.0.3
 =============
 
 - Improve performance of networkx utilities
+
+
+Version 0.0.4
+=============
+
+- Add load networkx graph from csv files
