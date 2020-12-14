@@ -276,7 +276,7 @@ def load_graph_from_csv_files(
     G.add_nodes_from(list(nodes_df.key))
     for column in nodes_df.columns:
         attrs_dict = {
-            k: v for k, v in zip(nodes_df.key, nodes_df[column]) if v and not pd.isna(v)
+            k: v for k, v in zip(nodes_df.key, nodes_df[column]) if not pd.isna(v)
         }
         nx.set_node_attributes(
             G,

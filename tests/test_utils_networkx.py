@@ -426,6 +426,7 @@ class NetworkxTestCase(unittest.TestCase):
                 {
                     "key": ["a", "b", "c", "d"],
                     "type": ["item", "seqitem", "subseqitem", None],
+                    "tokens_n": [1, 2, 0, None],
                 }
             ).to_csv(os.path.join(tmpdirname, "2000.nodes.csv.gz"), index=False)
 
@@ -444,8 +445,8 @@ class NetworkxTestCase(unittest.TestCase):
             self.assertEqual(
                 list(g.nodes(data=True)),
                 [
-                    ("a", {"key": "a", "type": "item"}),
-                    ("b", {"key": "b", "type": "seqitem"}),
+                    ("a", {"key": "a", "type": "item", "tokens_n": 1.0}),
+                    ("b", {"key": "b", "type": "seqitem", "tokens_n": 2.0}),
                     ("d", {"key": "d"}),
                 ],
             )
@@ -458,9 +459,9 @@ class NetworkxTestCase(unittest.TestCase):
             self.assertEqual(
                 list(g.nodes(data=True)),
                 [
-                    ("a", {"key": "a", "type": "item"}),
-                    ("b", {"key": "b", "type": "seqitem"}),
-                    ("c", {"key": "c", "type": "subseqitem"}),
+                    ("a", {"key": "a", "type": "item", "tokens_n": 1.0}),
+                    ("b", {"key": "b", "type": "seqitem", "tokens_n": 2.0}),
+                    ("c", {"key": "c", "type": "subseqitem", "tokens_n": 0.0}),
                     ("d", {"key": "d"}),
                 ],
             )
@@ -480,8 +481,8 @@ class NetworkxTestCase(unittest.TestCase):
             self.assertEqual(
                 list(g.nodes(data=True)),
                 [
-                    ("b", {"key": "b", "type": "seqitem"}),
-                    ("c", {"key": "c", "type": "subseqitem"}),
+                    ("b", {"key": "b", "type": "seqitem", "tokens_n": 2.0}),
+                    ("c", {"key": "c", "type": "subseqitem", "tokens_n": 0.0}),
                     ("d", {"key": "d"}),
                 ],
             )
