@@ -243,7 +243,10 @@ def aggregate_attr_in_quotient_graph(nG, G, new_nodes, aggregation_attrs):
 
 
 def load_graph_from_csv_files(
-    crossreference_folder, file_basename, filter="exclude_subseqitems"
+    crossreference_folder,
+    file_basename,
+    filter="exclude_subseqitems",
+    filter_by_edge_types=None,
 ):
     """
     Loads a networkx MultiDiGraph from a nodelist and edgelist
@@ -256,6 +259,17 @@ def load_graph_from_csv_files(
     If filter is a callable, it is called with a pandas.DataFrame loaded
     from the csv as the only argument.
     The callable must return values to filter the DataFrame.
+
+    Args:
+        crossreference_folder: Folder containing the edgelists
+        file_basename: base filename of the edgelists
+            (will be suffixed with '.nodes.csv.gz' and '.edges.csv.gz')
+        filter: Filters the nodes to load. Options "exclude_subseqitems",
+            None or a function that filters a pandas.DataFrame
+        filter_by_edge_types: Filters the edges to load. None in includes all
+            edges. You can also provide a list of edge_types.
+            E.g. `['containment', 'reference']`.
+
     """
     nodes_csv_path = os.path.join(
         crossreference_folder, f"{file_basename}.nodes.csv.gz"
@@ -290,7 +304,11 @@ def load_graph_from_csv_files(
     edges = [
         (u, v, {"edge_type": edge_type})
         for u, v, edge_type in zip(edges_df.u, edges_df.v, edges_df.edge_type)
-        if u in all_nodes and v in all_nodes
+        if (
+            (filter_by_edge_types is None or edge_type in filter_by_edge_types)
+            and u in all_nodes
+            and v in all_nodes
+        )
     ]
     del edges_df
     G.add_edges_from(edges)

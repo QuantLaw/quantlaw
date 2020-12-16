@@ -434,7 +434,7 @@ class NetworkxTestCase(unittest.TestCase):
                 {
                     "u": ["a", "a", "c", "d"],
                     "v": ["b", "b", "d", "c"],
-                    "edge_type": ["x", "x", "x", "x"],
+                    "edge_type": ["containment", "reference", "x", "x"],
                 }
             ).to_csv(os.path.join(tmpdirname, "2000.edges.csv.gz"))
 
@@ -452,7 +452,10 @@ class NetworkxTestCase(unittest.TestCase):
             )
             self.assertEqual(
                 list(g.edges(data=True)),
-                [("a", "b", {"edge_type": "x"}), ("a", "b", {"edge_type": "x"})],
+                [
+                    ("a", "b", {"edge_type": "containment"}),
+                    ("a", "b", {"edge_type": "reference"}),
+                ],
             )
 
             g = load_graph_from_csv_files(tmpdirname, "2000", filter=None)
@@ -468,8 +471,8 @@ class NetworkxTestCase(unittest.TestCase):
             self.assertEqual(
                 list(g.edges(data=True)),
                 [
-                    ("a", "b", {"edge_type": "x"}),
-                    ("a", "b", {"edge_type": "x"}),
+                    ("a", "b", {"edge_type": "containment"}),
+                    ("a", "b", {"edge_type": "reference"}),
                     ("c", "d", {"edge_type": "x"}),
                     ("d", "c", {"edge_type": "x"}),
                 ],
@@ -489,4 +492,23 @@ class NetworkxTestCase(unittest.TestCase):
             self.assertEqual(
                 list(g.edges(data=True)),
                 [("c", "d", {"edge_type": "x"}), ("d", "c", {"edge_type": "x"})],
+            )
+
+            g = load_graph_from_csv_files(
+                tmpdirname, "2000", filter=None, filter_by_edge_types=["containment"]
+            )
+            self.assertEqual(
+                list(g.nodes(data=True)),
+                [
+                    ("a", {"key": "a", "tokens_n": 1.0, "type": "item"}),
+                    ("b", {"key": "b", "tokens_n": 2.0, "type": "seqitem"}),
+                    ("c", {"key": "c", "tokens_n": 0.0, "type": "subseqitem"}),
+                    ("d", {"key": "d"}),
+                ],
+            )
+            self.assertEqual(
+                list(g.edges(data=True)),
+                [
+                    ("a", "b", {"edge_type": "containment"}),
+                ],
             )
