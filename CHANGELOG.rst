@@ -29,3 +29,9 @@ Version 0.0.4
 =============
 
 - Add load networkx graph from csv files
+
+Version 0.0.5
+=============
+
+- Fix `load_graph_from_csv_files` (attributes evaluating to `False` are now imported)
+- Enable edge filtering in `load_graph_from_csv_files` (e.g. to load reference edges or hierarchy edges only)
