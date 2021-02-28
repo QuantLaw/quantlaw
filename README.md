@@ -16,11 +16,11 @@ The package currently consists of two modules.
 ### de_extract
 
 `quantlaw.de_extract` is an extractor for references to statutes in German legal texts.
-Different to most other Named-entity recognition packages this module does not only
-identifies the references but also extracts its content. This can e.g. be used to
-quantitativly analyze the structure of the law.
+In contrast to most other named entity recognition packages, this module not only
+identifies the references but also extracts their content. This can, e.g., be used to
+quantitatively analyze the structure of the law.
 
-For example can the content of two references in the following text be extracted.
+For example, we can extract the content of two references in the following text.
 
 Source text:
 
@@ -37,7 +37,7 @@ Getting started in the documentation contains a minimal example.
 ### utils
 
 `quantlaw.utils` contains several utilities that are helpful to analyze the structure of
-the law with `BeautifulSoup` and `networkx`. The documentation contains furhter
+the law with `BeautifulSoup` and `networkx`. The documentation contains further
 information about the individual usages.
 
 ## Installation
@@ -58,7 +58,7 @@ Related Data: [Preprocessed Input Data for *Sci. Rep.* **10** (2020)](http://dx.
 
 ## Collaboration
 
-Please format the code using `isort`, `black`, and `flake8`. An convenient option to
+Please format the code using `isort`, `black`, and `flake8`. A convenient option to
 ensure correct formatting of the code is to
 [pip install pre-commit](https://pypi.org/project/pre-commit/) and run
 `pre-commit install` to add code checking and reformatting as git pre-commit hook.
