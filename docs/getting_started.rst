@@ -8,7 +8,7 @@ Getting Started
 Installation
 ------------
 
-You need to have python installed. Python 3.7 is recommended but other versions
+You need to have python installed. Python 3.7.9 is recommended but other versions
 will likely work as well.
 
 Install with

@@ -42,7 +42,7 @@ information about the individual usages.
 
 ## Installation
 
-Python 3.7 is recommended. Our package is provided via `pip install quantlaw`.
+Python 3.7.9 is recommended. Our package is provided via `pip install quantlaw`.
 
 ## Further repositories
 
