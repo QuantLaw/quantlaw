@@ -18,8 +18,6 @@ matrix:
       env: DISTRIB="ubuntu" TOX_PYTHON_VERSION="py38" COVERAGE="false"
     - python: 3.9
       env: DISTRIB="ubuntu" TOX_PYTHON_VERSION="py39" COVERAGE="false"
-    - python: 3.10
-      env: DISTRIB="ubuntu" TOX_PYTHON_VERSION="py310" COVERAGE="false"
 install:
   - source tests/travis_install.sh
   - pip install -r requirements.txt
