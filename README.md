@@ -59,6 +59,7 @@ Related Repositories:
 - [Measuring Law Over Time](https://github.com/QuantLaw/Measuring-Law-Over-Time) ([Publication Release](https://doi.org/10.5281/zenodo.4660191))
 - [Law Smells](https://github.com/QuantLaw/law-smells) ([Publication Release](https://doi.org/10.5281/zenodo.6468193))
 - [Komplexität des Rechts](https://github.com/beckedorf/komplexitaet-des-rechts) ([Publication Release](https://doi.org/10.1628/978-3-16-164476-4-appendix))
+- [Legal Data Preprocessing](https://github.com/QuantLaw/legal-data-preprocessing) ([Latest Publication Release](https://doi.org/10.5281/zenodo.4070772))
 - [Legal Data Clustering](https://github.com/QuantLaw/legal-data-clustering) ([Latest Publication Release](https://doi.org/10.5281/zenodo.4070774))
 
 Related Data: 
