@@ -46,8 +46,6 @@ Python 3.7.9 is recommended. Our package is provided via `pip install quantlaw`.
 
 ## Related projects and publications
 
-It is, inter alia, used to produce the results reported in the following publication:
-
 It is, inter alia, used to produce the results reported in the following publications:
 
 - Daniel Martin Katz, Corinna Coupette, Janis Beckedorf, and Dirk Hartung, Complex Societies and the Growth of the Law, *Sci. Rep.* **10** (2020), [https://doi.org/10.1038/s41598-020-73623-x](https://doi.org/10.1038/s41598-020-73623-x)
