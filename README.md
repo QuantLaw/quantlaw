@@ -44,7 +44,7 @@ information about the individual usages.
 
 Python 3.7.9 is recommended. Our package is provided via `pip install quantlaw`.
 
-## Related projects and publications
+## Related Projects and Publications
 
 It is, inter alia, used to produce the results reported in the following publications:
 
