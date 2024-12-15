@@ -65,7 +65,7 @@ Related Repositories:
 Related Data: 
 - [Preprocessed Input Data for *Sci. Rep.* **10** (2020)](https://doi.org/10.5281/zenodo.4070767)
 - [Preprocessed Input Data for *Measuring Law Over Time*, *Front. Phys.* **9:658463** (2021)](https://doi.org/10.5281/zenodo.4660133)
-- [Preprocessed Input Data for *Komplexität des Rechts*, Mohr Siebeck, to appear (2025)](https://doi.org/10.5281/zenodo.14298980)
+- [Preprocessed Input Data for *Komplexität des Rechts*, Mohr Siebeck, to appear (2025)](https://doi.org/10.1628/978-3-16-164476-4-appendix)
 - [Preprocessed Input Data for *Law Smells*, *Artif Intell Law* **31**, 335–368 (2023)](https://doi.org/10.5281/zenodo.6468191)
 
 ## Collaboration
