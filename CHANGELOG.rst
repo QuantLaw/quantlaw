@@ -40,3 +40,8 @@ Version 0.0.6
 =============
 
 - Update readme
+
+Version 0.0.7
+=============
+
+- Update readme
