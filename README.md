@@ -53,7 +53,7 @@ It is, inter alia, used to produce the results reported in the following publica
 - Corinna Coupette, and Dirk Hartung, Rechtsstrukturvergleichung, *RabelsZ* **86**, 935-975 (2022), https://doi.org/10.1628/rabelsz-2022-0082
 - Corinna Coupette, Dirk Hartung, Janis Beckedorf, Maximilian Böther, and Daniel Martin Katz, Law Smells, *Artif Intell Law* **31**, 335-368 (2023), https://doi.org/10.1007/s10506-022-09315-w
 - Janis Beckedorf, Komplexität des Rechts, Mohr Siebeck (2025), https://doi.org/10.1628/978-3-16-164476-4
-- Titus Pünder and Corinna Coupette, The Power of Network Pluralism, Preprint, https://ssrn.com/abstract=5866882
+- Titus Pünder and Corinna Coupette, The Power of Network Pluralism, Preprint (2025), https://ssrn.com/abstract=5866882
 
 Related Repositories:
 - [Complex Societies and the Growth of the Law](https://github.com/QuantLaw/Complex-Societies-and-Growth) ([Publication Release](https://doi.org/10.5281/zenodo.4070769))
